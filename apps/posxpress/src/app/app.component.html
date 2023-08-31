@@ -1,1 +1,44 @@
-<org-nx-welcome></org-nx-welcome> <router-outlet></router-outlet>
+<div class="view" [class.is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="toolbar">
+    <button mat-icon-button (click)="snav.toggle()" *ngIf="isAdmin() || ((links$ | async)?.length ?? 0 > 0)">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="app-name">{{ title }}</h1>
+    <ng-container *ngIf="closeOrder$ | async as closeOrder">
+      <button mat-icon-button (click)="closeOrder()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-container>
+  </mat-toolbar>
+
+  <mat-sidenav-container
+    class="sidenav-container"
+    [style.marginTop.px]="mobileQuery.matches ? 56 : 0"
+  >
+    <mat-sidenav
+      #snav
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+    >
+      <mat-nav-list>
+        <a
+          mat-list-item
+          [routerLink]="nav.link"
+          *ngFor="let nav of links$ | async"
+          >{{ nav.name }}</a
+        >
+        <mat-divider></mat-divider>
+        <a mat-list-item href="/admin">Einstellungen</a>
+        <a mat-list-item href="/">Bestellen</a>
+        <a mat-list-item href="/logout">Abmelden</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet
+        (activate)="onRouterOutletActivate($event)"
+      ></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

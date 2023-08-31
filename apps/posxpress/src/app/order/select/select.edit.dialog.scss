@@ -1,0 +1,19 @@
+.input {
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+}
+
+.actions {
+  display: flex;
+  gap: 20px;
+
+  button {
+    flex-grow: 1;
+  }
+}

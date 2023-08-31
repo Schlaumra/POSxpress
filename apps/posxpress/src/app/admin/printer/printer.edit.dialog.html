@@ -1,0 +1,29 @@
+<form [formGroup]="crudForm">
+<px-crud-dialog [crudForm]="crudForm">
+  <span crud-dialog-title>Drucker {{ context.edit ? 'bearbeiten' : 'hinzufügen' }}</span>
+  
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" required cdkFocusInitial />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>IP-Addresse</mat-label>
+    <input matInput formControlName="address" required />
+  </mat-form-field>
+  <px-form-tag-select [allTagsService]="dataService" [tags]="printer.tags"></px-form-tag-select>
+  <mat-form-field>
+    <mat-label>Modell</mat-label>
+    <mat-select formControlName="model">
+      <mat-optgroup *ngFor="let groups of modelGroups" [label]="groups.brand">
+        <mat-option *ngFor="let model of groups.models" [value]="groups.brand + ' ' + model">
+          {{ model }}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+
+  <button crud-dialog-actions mat-button [disabled]="!printer.address" (click)="testPrinter(printer.address)">
+    Verbindung Testen
+  </button>
+</px-crud-dialog>
+</form>

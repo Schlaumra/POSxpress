@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .table-input {
+      font-size: 2em;
+      text-align: center;
+    }
+
+    .confirm {
+      font-size: 5em;
+    }
+  }
+}

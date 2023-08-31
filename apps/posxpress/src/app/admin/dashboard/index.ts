@@ -1,0 +1,1 @@
+export { DashboardSettingsComponent } from './dashboard.settings.component'

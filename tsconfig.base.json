@@ -14,7 +14,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@px/client-crud": ["apps/posxpress/src/libs/client-crud/src/index.ts"],
+      "@px/client-dialog": [
+        "apps/posxpress/src/libs/client-dialog/src/index.ts"
+      ],
+      "@px/client-forms": ["apps/posxpress/src/libs/client-forms/src/index.ts"],
+      "@px/interface": ["libs/interface/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,10 +1,16 @@
+docker-compose.override.yaml
+
 # See http://help.github.com/ignore-files/ for more about ignoring files.
+
+/.env
 
 # compiled output
 dist
 tmp
 /out-tsc
 
+# NX
+/.nx
 # dependencies
 node_modules
 
@@ -30,7 +36,6 @@ node_modules
 /coverage
 /libpeerconnection.log
 npm-debug.log
-yarn-error.log
 testem.log
 /typings
 

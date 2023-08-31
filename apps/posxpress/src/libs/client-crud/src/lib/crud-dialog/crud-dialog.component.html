@@ -1,0 +1,25 @@
+<h2 mat-dialog-title><ng-content select="[crud-dialog-title]"></ng-content></h2>
+
+<mat-dialog-content class="crud-dialog-form">
+  <ng-content></ng-content>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <ng-content select="[crud-dialog-actions]"></ng-content>
+
+  <button mat-button (click)="onNoClick()">Abrechen</button>
+  <button
+    mat-button
+    [hidden]="false"
+    (click)="remove()"
+  >
+    Löschen
+  </button>
+  <button
+    mat-button
+    [disabled]="!crudForm.valid"
+    (click)="save()"
+  >
+    Speichern
+  </button>
+</mat-dialog-actions>

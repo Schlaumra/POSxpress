@@ -2,7 +2,7 @@
   "name": "posxpress",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "org",
+  "prefix": "px",
   "sourceRoot": "apps/posxpress/src",
   "tags": [],
   "targets": {
@@ -17,10 +17,17 @@
         "tsConfig": "apps/posxpress/tsconfig.app.json",
         "assets": [
           "apps/posxpress/src/favicon.ico",
-          "apps/posxpress/src/assets"
+          "apps/posxpress/src/manifest.webmanifest",
+          "apps/posxpress/src/assets",
+          "apps/posxpress/src/assets/icons"
         ],
-        "styles": ["apps/posxpress/src/styles.scss"],
-        "scripts": []
+        "styles": [
+          "@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/posxpress/src/styles.scss"
+        ],
+        "scripts": [],
+        "serviceWorker": true,
+        "ngswConfigPath": "apps/posxpress/ngsw-config.json"
       },
       "configurations": {
         "production": {
@@ -28,7 +35,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "1.2mb"
             },
             {
               "type": "anyComponentStyle",
@@ -56,6 +63,8 @@
           "browserTarget": "posxpress:build:production"
         },
         "development": {
+          "host": "0.0.0.0",
+          "proxyConfig": "apps/posxpress/proxy.conf.json",
           "browserTarget": "posxpress:build:development"
         }
       },

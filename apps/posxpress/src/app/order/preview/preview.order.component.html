@@ -1,0 +1,42 @@
+<ng-container *ngIf="orderStore.currentOrder$ | async as currentOrder">
+  <div class="preview-container">
+    <div class="accordion">
+      <mat-accordion #acc multi>
+        <mat-expansion-panel *ngFor="let tag of tags" [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ tag }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container *ngIf="currentOrder.productGroups.filter(orderFilter).filter(tagFilter(tag)) as productGroups">
+            <div *ngFor="let productGroup of productGroups" style="position: relative">
+              <mat-divider></mat-divider>
+              <div class="product-group">
+                <button mat-icon-button (click)="removeProduct(productGroup, currentOrder); $event.stopPropagation()"
+                  [hidden]="!productGroup.product.inStock">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="product-name">
+                  <span class="name" [matBadge]="productGroup.amount" [matBadgeHidden]="!productGroup.amount"
+                    matBadgeOverlap="false">{{ productGroup.name }}</span>
+                  <span class="info" [hidden]="!productGroup.info">{{
+                    productGroup.info
+                    }}</span>
+                </div>
+                <button mat-icon-button (click)="addProduct(productGroup, currentOrder); $event.stopPropagation()"
+                  [hidden]="!productGroup.product.inStock">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="print-button">
+      <button mat-fab color="primary" (click)="printOrder(currentOrder)">
+        <mat-icon>printer</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-container>

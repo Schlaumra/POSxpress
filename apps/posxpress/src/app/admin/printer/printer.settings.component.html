@@ -1,0 +1,31 @@
+<button mat-fab color="primary" class="add-fab" (click)="addPrinter()">
+  <mat-icon>add</mat-icon>
+</button>
+<div class="printerContainer">
+  <mat-card
+    *ngFor="let printer of printers"
+    class="printerCard"
+    (click)="openDialog(printer)"
+  >
+    <mat-card-header>
+      <mat-card-title [matBadge]="printer.status?.status ? '0N' : ''" matBadgePosition="after" matBadgeColor="primary">{{ printer.name }}</mat-card-title>
+      <mat-card-subtitle>{{ printer.address }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      src="assets/printer.svg"
+      height="150px"
+    />
+    <mat-card-content style="text-align: center">
+      {{ printer.model }}
+      {{ printer.status?.msg }}
+    </mat-card-content>
+    <mat-card-footer>
+      <mat-chip-listbox class="tag-box">
+        <mat-chip *ngFor="let tag of printer.tags" color="accent">{{
+          tag
+        }}</mat-chip>
+      </mat-chip-listbox>
+    </mat-card-footer>
+  </mat-card>
+</div>

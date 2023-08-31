@@ -1,0 +1,6 @@
+services:
+  mongo:
+    ports:
+      - 27017:27017
+    volumes:
+      - ./conf/mongodb/entrypoint/:/docker-entrypoint-initdb.d/

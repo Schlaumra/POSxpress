@@ -1,0 +1,17 @@
+<form [formGroup]="crudForm">
+  <px-crud-dialog [crudForm]="crudForm">
+    <span crud-dialog-title>Benutzer {{ context.edit ? 'bearbeiten' : 'hinzufügen' }}</span>
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Passwort</mat-label>
+      <input matInput formControlName="password" required />
+    </mat-form-field>
+
+    <px-form-tag-select [allTagsService]="dataService" [tags]="user.tags"></px-form-tag-select>
+  </px-crud-dialog>
+</form>

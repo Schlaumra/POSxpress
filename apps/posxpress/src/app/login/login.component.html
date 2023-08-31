@@ -1,0 +1,48 @@
+<div class="login">
+  <img src="../../assets/logo.png" width="200px" />
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <mat-form-field>
+      <mat-label>Benutzername</mat-label>
+      <input
+        matInput
+        id="username"
+        type="text"
+        autocomplete="username"
+        formControlName="username"
+        tabindex="0"
+        autofocus
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Passwort</mat-label>
+      <input
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        formControlName="password"
+      />
+      <button
+        class="material-symbols-rounded"
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!loginForm.valid"
+    >
+      Login
+    </button>
+  </form>
+</div>

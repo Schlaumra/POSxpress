@@ -1,0 +1,54 @@
+<form [formGroup]="crudForm">
+  <px-crud-dialog [crudForm]="crudForm">
+    <span crud-dialog-title>Produkt {{ context.edit ? 'bearbeiten' : 'hinzufügen' }}</span>
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Info</mat-label>
+      <textarea matInput maxlength="50" #text formControlName="info"></textarea>
+      <mat-hint align="end">{{text.value.length}}/50</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Preis</mat-label>
+      <input matInput type="number" formControlName="price" />
+      <span matSuffix style="margin-right: 10px">€</span>
+    </mat-form-field>
+    <px-form-tag-select [allTagsService]="dataService" [tags]="product.tags"></px-form-tag-select>
+    <mat-checkbox matInput formControlName="inStock">Auf Lager</mat-checkbox>
+    <div formArrayName="ingredients" class="ingredients-view">
+      <div class="ingredients-actions">
+        <button mat-fab extended color="primary" (click)="addNewIngredient()">
+          <mat-icon class="mat-icon-rtl-mirror">add</mat-icon>
+          Zutaten
+        </button>
+        <button mat-icon-button (click)="ingredientsExpanded = !ingredientsExpanded">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ingredientsExpanded ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+      </div>
+      <div *ngIf="ingredientsExpanded">
+        <div class="ingredients-list" *ngFor="let ingredient of crudForm.controls.ingredients.controls; index as i" [formGroup]="ingredient">
+          <mat-divider></mat-divider>
+          <div class="ingredient-input">
+            <mat-slide-toggle formControlName="contained"></mat-slide-toggle>
+            <mat-form-field>
+              <input matInput formControlName="name" placeholder="Zutat" />
+            </mat-form-field>
+            <!-- <mat-form-field class="price-input">
+              <input matInput type="number" formControlName="extraPrice" />
+              <span matSuffix style="margin-right: 10px">€</span>
+            </mat-form-field> -->
+            <button mat-icon-button (click)="removeIngredient(i)">
+              <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </px-crud-dialog>
+</form>

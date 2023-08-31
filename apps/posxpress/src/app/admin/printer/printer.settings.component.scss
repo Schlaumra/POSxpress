@@ -1,0 +1,22 @@
+.add-fab {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 1000;
+}
+
+.printerContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+
+  .printerCard {
+    padding: 0.5rem;
+    min-width: 18rem;
+
+    .tag-box {
+      max-width: 18rem;
+    }
+  }
+}

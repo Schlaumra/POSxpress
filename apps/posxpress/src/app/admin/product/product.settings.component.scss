@@ -1,0 +1,30 @@
+.cdk-drag-preview {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.move-row {
+  width: 0.2rem;
+
+  mat-icon {
+    cursor: grab;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.outOfStock {
+  background-color: red;
+}
+
+.action-column {
+  text-align: end;
+}

@@ -1,0 +1,16 @@
+<div class="container">
+  <form>
+  <div class="table-container">
+    <h1>Tische: {{ this.tableNumber }}</h1>
+
+      <mat-form-field appearance="outline" class="table-input">
+        <mat-label>Tischnummer eingeben</mat-label>
+        <input [formControl]="formControl" matInput type="number" autofocus />
+      </mat-form-field>
+
+      <button mat-fab color="primary" [disabled]="formControl.invalid" (click)="goToSelection()" class="confirm">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </form>
+</div>

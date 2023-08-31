@@ -1,0 +1,1 @@
+export { AbstractCrudService } from './crud';

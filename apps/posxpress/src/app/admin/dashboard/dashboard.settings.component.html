@@ -1,0 +1,32 @@
+<ng-container *ngIf="settings$ | async as settings">
+    <form [formGroup]="tableForm">
+        <div class="table-number-form">
+            <mat-form-field>
+                <mat-label>Anzahl Tische</mat-label>
+                <input matInput formControlName="table" type="number">
+            </mat-form-field>
+        </div>
+        <div class="tag-form">
+            <px-form-tag-select [allTagsService]="dataService" [removeTags]="true"
+                [tags]="tableForm.value.tags"></px-form-tag-select>
+        </div>
+    </form>
+    <div class="info">
+        <div class="bill">
+            <h2>Abrechnung</h2>
+            <div class="actions">
+                <button mat-fab extended color="primary" (click)="printTmpBill()"><mat-icon>history</mat-icon>Zwischenergebnis</button>
+                <button mat-fab extended color="primary" (click)="printBill()"><mat-icon>lock</mat-icon>Endergebnis</button>
+            </div>
+        </div>
+        <div class="stats">
+            <h2>Statistik</h2>
+            <ng-container *ngIf="stats$ | async as stats">
+                <p><strong>Erste Bestellung:</strong> {{ stats.first ? (stats.first | date: 'dd.MM.YYYY HH:mm (zzzz)') : "--" }}</p>
+                <p><strong>Anzahl:</strong> {{ stats.amount || 0 }}</p>
+                <p><strong>Unbezahlte:</strong> {{ stats.unpaid || 0 }}</p>
+                <p><strong>Einnahmen:</strong> {{ stats.income || 0 | currency: 'EUR' }} </p>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,27 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+  posxpress:
+    image: posxpress
+    restart: always
+    ports:
+      - 8080:80
+  posxapi:
+    image: posxapi
+    restart: always
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_ADMIN_USER=${MONGO_ADMIN_USER}
+      - MONGO_ADMIN_PASSWORD=${MONGO_ADMIN_PASSWORD}
+      - JWT_TOKEN=${JWT_TOKEN}
+
+volumes:
+  mongo-data:

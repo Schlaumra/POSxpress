@@ -1,0 +1,33 @@
+.orderContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .orderContent {
+    flex-grow: 1;
+    padding-bottom: var(--mat-toolbar-standard-height);
+    @media screen and (max-width: 599px) {
+      padding-bottom: var(--mat-toolbar-mobile-height);
+    }
+  }
+  .orderBottomBar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+    
+    .bottom-nav {
+      display: flex;
+      .button-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .info-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

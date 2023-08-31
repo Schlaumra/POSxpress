@@ -1,0 +1,36 @@
+<div class="orderContainer">
+  <div class="orderContent">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="orderBottomBar">
+    <mat-toolbar class="bottom-nav">
+      <mat-toolbar-row>
+        <ng-container *ngIf="(orderStore.state$ | async) === 0">
+          <div class="button-container">
+            <button mat-fab extended color="primary" (click)="startNewOrder()"><mat-icon>edit_document</mat-icon>Neue Bestellung</button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="orderStore.state$ | async as state">
+          <button mat-mini-fab (click)="navigateBack()" *ngIf="state !== 0" [disabled]="state - 1 < 1">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <div class="info-container">
+            <ng-container *ngIf="(orderStore.currentOrder$ | async) as currentOrder">
+              <span class="info">{{ currentOrder ? 'Tisch: ' + currentOrder.table : ''
+                }}{{
+                state >= selectState
+                ? '  |  ' + ((orderStore.currentPrice$ | async) | currency : 'EUR')
+                : ''
+                }}</span>
+            </ng-container>
+          </div>
+          <button mat-mini-fab (click)="navigateforward()" *ngIf="state !== 0" [disabled]="orderStore.checkState() < state + 1">
+            <mat-icon>{{
+              state === paymentState ? 'done_all' : 'chevron_right'
+              }}</mat-icon>
+          </button>
+        </ng-container>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+</div>

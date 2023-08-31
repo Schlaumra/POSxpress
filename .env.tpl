@@ -1,0 +1,5 @@
+MONGO_DB="posxpress"
+MONGO_ADMIN_USER="root"
+MONGO_ADMIN_PASSWORD="development"
+
+JWT_TOKEN="YOUR_TOKEN_HERE"
