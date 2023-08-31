@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Drucker {{ data.new ? 'hinzufügen' : 'bearbeiten' }}</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="printer.name" required cdkFocusInitial>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>IP-Addresse</mat-label>
+    <input matInput [(ngModel)]="printer.address" required>
+  </mat-form-field>
+  <mat-form-field class="example-chip-list">
+    <mat-label>Kategorie</mat-label>
+    <mat-chip-grid #chipGrid>
+      <mat-chip-row *ngFor="let tag of printer.tags" (removed)="remove(tag)">
+        {{tag}}
+        <button matChipRemove [attr.aria-label]="'remove ' + tag">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    <input placeholder="Hinzufügen..." #tagsInput [formControl]="tagCtrl"
+      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"/>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+        {{tag}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Modell</mat-label>
+    <mat-select>
+      <mat-optgroup *ngFor="let groups of modelGroups" [label]="groups.brand">
+        <mat-option *ngFor="let model of groups.models" [value]="model">
+          {{ model }}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="!printer.address" (click)="testPrinter()">Verbindung Testen</button>
+  <button mat-button mat-dialog-close>Abrechen</button>
+  <button mat-button [mat-dialog-close]="{code: 'DELETE', id: printer.id}" [hidden]="data.new">Löschen</button>
+  <button mat-button [mat-dialog-close]="printer" [disabled]="!(printer.name && printer.address)">Speichern</button>
+</mat-dialog-actions>

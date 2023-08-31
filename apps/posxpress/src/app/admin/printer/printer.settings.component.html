@@ -1,0 +1,20 @@
+<button mat-flat-button color="primary" (click)="addPrinter()">Hinzufügen</button>
+<div class="printerContainer">
+  <mat-card *ngFor="let printer of printers" class="printerCard" (click)="openDialog(printer)">
+    <mat-card-header>
+      <mat-card-title>{{printer.name}}</mat-card-title>
+      <mat-card-subtitle>{{printer.address}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/print/default/48px.svg" height="200px">
+    <mat-card-content style="text-align: center;">
+      {{ printer.status?.status || "Unbekannt" }}
+      {{ printer.model }}
+      {{ printer.status?.msg }}
+    </mat-card-content>
+    <mat-card-footer>
+      <mat-chip-listbox>
+        <mat-chip *ngFor="let tag of printer.tags" color="accent">{{ tag }}</mat-chip>
+      </mat-chip-listbox>
+    </mat-card-footer>
+  </mat-card>
+</div>

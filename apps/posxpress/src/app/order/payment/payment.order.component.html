@@ -1,0 +1,74 @@
+<div class="payment-container">
+    <div class="accordion">
+        <mat-accordion #acc multi>
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Bestellt
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{priceReducer(categories['bestellt']) | currency: 'EUR'}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let productGroup of categories['bestellt']; index as i" style="position: relative;">
+                    <mat-divider></mat-divider>
+                    <div class="product-group">
+                        <div class="product-name">
+                            <span class="name" [matBadge]="productGroup.amount" [matBadgeHidden]="!productGroup.amount"
+                                matBadgeOverlap="false">{{productGroup.name}}</span>
+                            <span class="info" [hidden]="!productGroup.info">{{productGroup.info}}</span>
+                        </div>
+                        <button mat-icon-button (click)="addToPartPayment(productGroup, i)"><mat-icon>move_down</mat-icon></button>
+                    </div>
+                </div>
+                <mat-action-row>
+                    <button mat-button color="primary" [disabled]="categories['bestellt'].length < 1" (click)="pay('Gesamtzahlung', categories['bestellt'])"><mat-icon>receipt_long</mat-icon>Alles bezahlen</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Teilzahlung
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{priceReducer(categories['teil']) | currency: 'EUR'}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let productGroup of categories['teil']; index as i" style="position: relative;">
+                    <mat-divider></mat-divider>
+                    <div class="product-group">
+                        <button mat-icon-button (click)="revertToOrdered(productGroup, i)"><mat-icon>move_up</mat-icon></button>
+                        <div class="product-name">
+                            <span class="name" [matBadge]="productGroup.amount" [matBadgeHidden]="!productGroup.amount"
+                                matBadgeOverlap="false">{{productGroup.name}}</span>
+                            <span class="info" [hidden]="!productGroup.info">{{productGroup.info}}</span>
+                        </div>
+                    </div>
+                </div>
+                <mat-action-row>
+                    <button mat-button color="primary" [disabled]="categories['teil'].length < 1" (click)="pay('Teilzahlung', categories['teil'])"><mat-icon>receipt</mat-icon>Teilzahlung</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Bezahlt
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{priceReducer(categories['bezahlt']) | currency: 'EUR'}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let productGroup of categories['bezahlt']" style="position: relative;">
+                    <mat-divider></mat-divider>
+                    <div class="product-group">
+                        <div class="product-name">
+                            <span class="name" [matBadge]="productGroup.amount" [matBadgeHidden]="!productGroup.amount"
+                                matBadgeOverlap="false">{{productGroup.name}}</span>
+                            <span class="info" [hidden]="!productGroup.info">{{productGroup.info}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="orderContainer">
+    <div class="orderContent">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="orderBottomBar">
+        <mat-toolbar class="bottom-nav">
+            <mat-toolbar-row>
+                <button mat-mini-fab (click)="navigateBack()" [disabled]="orderStore.state-1 < 0">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="info">{{orderStore.order ? 'Tisch: ' + orderStore.order.table : ''}}{{ ' Step: ' + orderStore.state }}</span>
+                <button mat-mini-fab (click)="navigateforward()" [disabled]="orderStore.checkState() < orderStore.state+1">
+                    <mat-icon>{{orderStore.state === paymentState ? 'done_all' : 'chevron_right'}}</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+</div>
+

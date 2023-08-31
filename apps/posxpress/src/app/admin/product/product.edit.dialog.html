@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Produkt {{ data.new ? 'erstellen' : 'bearbeiten' }}</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="product.name" required cdkFocusInitial>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Preis</mat-label>
+    <input matInput type="number" [(ngModel)]="product.price" required>
+    <span matSuffix style="margin-right: 10px;">€</span>
+  </mat-form-field>
+  <mat-form-field class="example-chip-list">
+    <mat-label>Kategorien</mat-label>
+    <mat-chip-grid #chipGrid>
+      <mat-chip-row *ngFor="let tag of product.tags" (removed)="remove(tag)">
+        {{tag}}
+        <button matChipRemove [attr.aria-label]="'remove ' + tag">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    <input placeholder="Hinzufügen..." #tagsInput [formControl]="tagCtrl"
+      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"/>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+        {{tag}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-checkbox matInput [(ngModel)]="product.inStock">Auf Lager</mat-checkbox>
+  <div>
+    <button mat-icon-button (click)="ingredientsExpanded = !ingredientsExpanded">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{ingredientsExpanded ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+    <span>Zutaten</span>
+    <button mat-icon-button (click)="addNewIngredient()">
+      <mat-icon class="mat-icon-rtl-mirror">add</mat-icon>
+    </button>
+    <div *ngIf="ingredientsExpanded">
+      <div *ngFor="let ingredient of product.ingredients; index as i">
+        <mat-divider></mat-divider>
+        <mat-slide-toggle [(ngModel)]="ingredient.contained"></mat-slide-toggle>
+        <mat-form-field>
+          <input matInput required [(ngModel)]="ingredient.name" placeholder="Zutat">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="ingredient.extraPrice" required>
+          <span matSuffix style="margin-right: 10px;">€</span>
+        </mat-form-field>
+        <button mat-icon-button (click)="removeIngredient(i)">
+          <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Abrechen</button>
+  <button mat-button [mat-dialog-close]="product" [disabled]="!(product.name && product.price)">Speichern</button>
+</mat-dialog-actions>
