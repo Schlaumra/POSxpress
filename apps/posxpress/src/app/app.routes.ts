@@ -9,20 +9,21 @@ import { TableOrderComponent } from './order/table/table.order.component';
 import { SelectOrderComponent } from './order/select/select.order.component';
 import { PreviewOrderComponent } from './order/preview/preview.order.component';
 import { PaymentOrderComponent } from './order/payment/payment.order.component';
+import { authGuard } from './auth/auth.guard'
 
 export const appRoutes: Route[] = [
     { path: 'login', component: LoginComponent },
-    { path: 'order', component: OrderComponent, children: [
+    { path: 'order', component: OrderComponent, canActivate: [authGuard], data: {roles: ['admin', 'waiter']}, children: [
         { path: 'table', component: TableOrderComponent },
         { path: 'select', component: SelectOrderComponent },
         { path: 'preview', component: PreviewOrderComponent },
         { path: 'payment', component: PaymentOrderComponent },
         { path: '**', redirectTo: 'table' },
     ] },
-    { path: 'admin', component: AdminComponent, children: [
+    { path: 'admin', component: AdminComponent, canActivate: [authGuard], data: {roles: ['admin']}, children: [
         { path: 'user', component: UserSettingsComponent },
         { path: 'printer', component: PrinterSettingsComponent },
         { path: 'product', component: ProductSettingsComponent },
     ] },
-    // { path: '**', component: LoginComponent },
+    { path: '**', component: OrderComponent },
 ];

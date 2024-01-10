@@ -31,7 +31,7 @@ export class SelectOrderComponent {
       this.order = this.orderStore.order;
     } else throw Error('Keine Order');
 
-    this.data.getTags().subscribe((value) => (this.tags = value));
+    this.data.getSettings().subscribe((value) => (this.tags = value.tags));
     this.data.getProducts().subscribe((value) => {
       if (this.order.productGroups.length === 0) {
         value.forEach((product) =>
@@ -65,10 +65,11 @@ export class SelectOrderComponent {
     dialogRef.afterClosed().subscribe((result?: {action: string, productGroup: ProductGroup}) => {
       if(result?.action) {
         const groupIndex = this.order.productGroups.indexOf(productGroup)
+        result.productGroup.info = result.productGroup.product.info
 
         const customIngredients = result.productGroup.product.ingredients?.filter(value => value.changed)
         if(customIngredients && customIngredients.length > 0) {
-          result.productGroup.info = ""
+          result.productGroup.info = (result.productGroup.product.note ? result.productGroup.product.note+' ' : '')
           customIngredients.forEach((value, i) => {
             if (i !== 0) {
               result.productGroup.info += ' '
@@ -76,8 +77,8 @@ export class SelectOrderComponent {
             result.productGroup.info += (value.contained ? '+' : '-') + value.name
           })
         }
-        else if(customIngredients?.length === 0 && result.productGroup.product.note) {
-          result.productGroup.info += ' ' + result.productGroup.product.note
+        else if((customIngredients?.length || 0) === 0 && !!result.productGroup.product.note) {
+          result.productGroup.info = result.productGroup.product.note
         }
 
         // const tmp1 = result.productGroup.amount

@@ -64,6 +64,7 @@
         },
         "development": {
           "host": "10.0.0.43",
+          "proxyConfig": "apps/posxpress/proxy.conf.json",
           "browserTarget": "posxpress:build:development"
         }
       },

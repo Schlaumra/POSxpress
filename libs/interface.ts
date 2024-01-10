@@ -5,15 +5,25 @@ export interface Ingredient {
     changed?: boolean
 }
 
+export type Role = 'admin' | 'waiter';
+
+// Main Object
 export interface User {
-    id: string;
+    _id?: string;
     name: string;
-    password: string;
+    hashedPassword: string;
+    password?: string;
+    roles: Role[];
     tags: string[];
 }
 
+export interface LoginUser {
+    
+}
+
+// Main Object
 export interface Product {
-    id: string,
+    _id?: string;
     name: string,
     price: number,
     tags: string[],
@@ -38,7 +48,7 @@ export interface Status {
 }
 
 export interface PrinterSettings {
-    papersize: number
+    paperSize: number
 }
 
 export const MODELS = [
@@ -46,13 +56,15 @@ export const MODELS = [
     { brand: 'Tickoffice', models: ['RP820-WUE', 'RP0-WUE'] }
 ]
 
+export type PrinterModel = "Epson TM-T20III" | "Tickoffice RP820-WUE"
+
+// Main Object
 export interface Printer {
-    id: string,
+    _id?: string,
     name: string,
     address: string,
     tags: string[],
-    model: "Epson TM-T20III" | "Tickoffice RP820-WUE"
-    imgage?: string,
+    model: PrinterModel
     settings?: PrinterSettings,
     status?: Status
 }
@@ -63,8 +75,11 @@ export interface Payment {
     productGroups?: ProductGroup[],
 }
 
+// Main Object
 export interface Order {
+    _id?: string,
     table: number,
+    user: string, // TODO add to DB
     productGroups: ProductGroup[]
     printQueue?: [],
     printed: boolean,
@@ -72,6 +87,9 @@ export interface Order {
     payed: boolean,
 }
 
+// Main Object
 export interface Settings {
-    tables: number
+    version: number,
+    tables: number,
+    tags: string[]
 }

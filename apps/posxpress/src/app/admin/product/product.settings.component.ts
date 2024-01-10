@@ -2,7 +2,6 @@ import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core'
 import { AdminSettings } from '../settings'
 import { Product } from 'libs/interface';
 import { SelectionModel } from '@angular/cdk/collections';
-import { v4 as uuidv4 } from 'uuid'
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,8 +34,12 @@ export class ProductSettingsComponent extends AdminSettings {
 
   constructor(public dialog: MatDialog, private data: DataService) {
     super()
-    this.data.getProducts().subscribe(value => this.dataSource = value)
+    this.updateDataSource()
     this.selection.changed.subscribe(value => this.selected = value.source.selected);
+  }
+
+  updateDataSource() {
+    this.data.getProducts().subscribe(value => this.dataSource = value)
   }
 
   openDialog(product: Product, newlyCreated=false) {
@@ -53,27 +56,28 @@ export class ProductSettingsComponent extends AdminSettings {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)
       if (result) {
-        const index = this.dataSource.findIndex((value: Product) => value.id === result.id)
+        const index = this.dataSource.findIndex((value: Product) => value._id === result._id)
         if (index !== -1) {
-          this.dataSource[index] = result
+          this.data.updateProduct(result).subscribe()
         }
         else {
-          this.dataSource.push(result)
+          this.data.addProduct(result).subscribe()
           this.createProduct()
         }
-        this.dataSource = [...this.dataSource]
+        this.updateDataSource()
       }
     });
   }
 
   createProduct() {
     // TODO solve how to do with id
-    this.openDialog({id: uuidv4(), name: '', price: 0, tags: [], inStock: true}, true)
+    this.openDialog({name: '', price: 0, tags: [], inStock: true}, true)
   }
 
   deleteProduct() {
-    this.selected.forEach(value => {
-      this.dataSource = [...this.dataSource.filter(dataValue => value.id !== dataValue.id)]
+    this.selected.forEach((product: Product) => {
+      this.data.deleteProduct(product).subscribe()
+      this.dataSource = [...this.dataSource.filter(dataValue => product._id !== dataValue._id)]
     })
     this.selection.clear()
   }
@@ -117,37 +121,46 @@ export class ProductSettingsComponent extends AdminSettings {
     ReactiveFormsModule,
     AsyncPipe,
   ],
+  providers: [DataService],
 })
 export class ProductSettingsDialogComponent {
-  product: Product
+  product: Product;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl('');
   filteredTags: Observable<string[]>;
-  allTags: string[] = ['Essen', 'Trinken']; // TODO ask DB
+  allTags: string[] = [];
   ingredientsExpanded = false;
 
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
   announcer = inject(LiveAnnouncer);
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { product: Product; new?: boolean },
+    private dataService: DataService
+  ) {
+    this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      startWith(null),
+      map((tag: string | null) =>
+        tag ? this._filter(tag) : this.allTags.slice()
+      )
+    );
+    this.product = JSON.parse(JSON.stringify(this.data.product));
+  }
+
   addNewIngredient() {
-    if(!this.product.ingredients) {
-      this.product.ingredients = []
+    if (!this.product.ingredients) {
+      this.product.ingredients = [];
     }
-    this.product.ingredients.push({name: '', contained: true, extraPrice: 0})
-    this.ingredientsExpanded = true
+    this.product.ingredients.push({ name: '', contained: true, extraPrice: 0 });
+    this.ingredientsExpanded = true;
   }
 
   removeIngredient(ingredientIndex: number) {
-    this.product.ingredients = this.product.ingredients?.filter((_, index) => index !== ingredientIndex)
-  }
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { product: Product, new?: boolean }) {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),
+    this.product.ingredients = this.product.ingredients?.filter(
+      (_, index) => index !== ingredientIndex
     );
-    this.product = JSON.parse(JSON.stringify(this.data.product));
   }
 
   add(event: MatChipInputEvent): void {
@@ -183,6 +196,8 @@ export class ProductSettingsDialogComponent {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
+    return this.allTags.filter((tag) =>
+      tag.toLowerCase().includes(filterValue)
+    );
   }
 }

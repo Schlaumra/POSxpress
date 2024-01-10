@@ -30,6 +30,15 @@ import { SelectOrderComponent } from './order/select/select.order.component';
 import { PreviewOrderComponent } from './order/preview/preview.order.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthService } from './auth/auth.service';
+import { JwtModule } from "@auth0/angular-jwt";
+import { PrintService } from './print/print.service'
+import { AuthInterceptor } from './auth/auth-interceptor'
+
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 @NgModule({
   declarations: [
@@ -48,6 +57,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        // allowedDomains: ["example.com"],
+        // disallowedRoutes: ["http://example.com/examplebadroute/"],
+      },
+    }),
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     MatInputModule,
     MatIconModule,
@@ -67,7 +84,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatCardModule,
     MatCheckboxModule,
   ],
-  providers: [],
+  providers: [AuthService, PrintService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true,  },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,211 +1,62 @@
 import { Injectable } from '@angular/core';
-import { v4 as uuidv4 } from 'uuid';
-import { Printer, Product, Settings, User } from 'libs/interface';
-import { Observable, from } from 'rxjs';
-
-const USERS: User[] = [
-  {id: uuidv4(), name: 'kellner2', password: 'qwerty', tags: ['Essen']},
-  {id: uuidv4(), name: 'kellner3', password: 'qwerty', tags: ['Trinken']},
-  {id: uuidv4(), name: 'kellner1', password: 'qwerty', tags: ['Essen', 'Trinken']},
-];
-
-const PRODUCTS: Product[] = [
-  {
-    id: uuidv4(),
-    name: 'Pizza',
-    price: 10.42,
-    tags: ['Essen'],
-    inStock: true,
-    info: "Vollkorn",
-    ingredients: [
-      { name: 'Tomatensouce', contained: true, extraPrice: 0 },
-      { name: 'Mozarella', contained: true, extraPrice: 0 },
-      { name: 'Salami', contained: false, extraPrice: 0.10 },
-    ],
-  },
-  {
-    id: uuidv4(),
-    name: 'Burger',
-    price: 8.5,
-    tags: ['Essen'],
-    inStock: false,
-    ingredients: [
-      { name: 'Tomaten', contained: true, extraPrice: 0 },
-      { name: 'Käse', contained: true, extraPrice: 0 }
-    ]
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: false,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: false,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: false,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Cola',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-  {
-    id: uuidv4(),
-    name: 'Fanta',
-    price: 3,
-    tags: ['Trinken'],
-    inStock: true,
-  },
-];
-
-const PRINTERS: Printer[] = [
-  {
-    id: uuidv4(),
-    name: "Drucker 1",
-    address: "192.168.1.1",
-    model: "Epson TM-T20III",
-    tags: ["Essen", "Trinken"]
-  },
-  {
-    id: uuidv4(),
-    name: "Drucker 2",
-    address: "192.168.1.2",
-    model: "Tickoffice RP820-WUE",
-    tags: ["Essen"]
-  },
-  {
-    id: uuidv4(),
-    name: "Drucker 3",
-    address: "192.168.1.3",
-    model: "Epson TM-T20III",
-    tags: ["Trinken"]
-  },
-]
-
-const SETTINGS: Settings = {
-  tables: 15
-}
-
-const TAGS: string[] = ["Essen", "Trinken"]
+import { Order, Printer, Product, Settings, User } from 'libs/interface';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  constructor(
+    private httpClient: HttpClient
+  ) { }
+
   getUsers(): Observable<User[]> {
-    return from([USERS])
+    return this.httpClient.get<User[]>('/api/users')
   }
+  addUser(user: User): Observable<object> {
+    return this.httpClient.post('/api/users', user)
+  }
+  deleteUser(user: User) {
+    return this.httpClient.delete(`api/users/${user._id}`)
+  }
+  updateUser(user: Partial<User>) {
+    return this.httpClient.patch(`/api/users/${user._id}`, user)
+  }
+
 
   getProducts(): Observable<Product[]> {
-    return from([PRODUCTS])
+    return this.httpClient.get<Product[]>('/api/products')
   }
+  addProduct(product: Product): Observable<object> {
+    return this.httpClient.post('/api/products', product)
+  }
+  deleteProduct(product: Product) {
+    return this.httpClient.delete(`api/products/${product._id}`)
+  }
+  updateProduct(product: Partial<Product>) {
+    return this.httpClient.patch(`/api/products/${product._id}`, product)
+  }
+
 
   getPrinters(): Observable<Printer[]> {
-    return from([PRINTERS])
+    return this.httpClient.get<Printer[]>('/api/printers')
+  }
+  addPrinter(printer: Printer): Observable<object> {
+    return this.httpClient.post('/api/printers', printer)
+  }
+  deletePrinter(printer: Printer) {
+    return this.httpClient.delete(`api/printers/${printer._id}`)
+  }
+  updatePrinter(printer: Partial<Printer>) {
+    return this.httpClient.patch(`/api/printers/${printer._id}`, printer)
+  }
+  print(printer: Printer, order: Order) {
+    return this.httpClient.post(`api/printers/print/${printer._id}`, order)
   }
 
+  
   getSettings(): Observable<Settings> {
-    return from([SETTINGS])
-  }
-
-  getTags(): Observable<string[]> {
-    return from([TAGS])
+    return this.httpClient.get<Settings>('/api/settings')
   }
 }

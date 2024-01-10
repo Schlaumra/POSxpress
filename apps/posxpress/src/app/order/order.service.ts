@@ -75,4 +75,8 @@ export class OrderService {
   }
 
   orderedFilter = (value: ProductGroup) => value.amount > 0
+
+  getCurrentPrice(): number {
+    return this.order?.productGroups.filter(this.orderedFilter).reduce((prev, curr) => (curr.product.price * curr.amount)+prev, 0) || 0
+  }
 }

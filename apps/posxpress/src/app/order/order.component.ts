@@ -8,6 +8,7 @@ import { OrderService, OrderState } from './order.service';
 })
 export class OrderComponent {
   paymentState = OrderState.payment
+  selectState = OrderState.select
   constructor(public orderStore: OrderService) {}
 
   navigateBack() {

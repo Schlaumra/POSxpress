@@ -42,6 +42,6 @@
 <mat-dialog-actions align="end">
   <button mat-button [disabled]="!printer.address" (click)="testPrinter()">Verbindung Testen</button>
   <button mat-button mat-dialog-close>Abrechen</button>
-  <button mat-button [mat-dialog-close]="{code: 'DELETE', id: printer.id}" [hidden]="data.new">Löschen</button>
+  <button mat-button [mat-dialog-close]="{code: 'DELETE', _id: printer._id}" [hidden]="data.new">Löschen</button>
   <button mat-button [mat-dialog-close]="printer" [disabled]="!(printer.name && printer.address)">Speichern</button>
 </mat-dialog-actions>

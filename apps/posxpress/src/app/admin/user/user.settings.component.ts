@@ -14,7 +14,6 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {NgFor, AsyncPipe} from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import { User } from 'libs/interface'
-import { v4 as uuidv4 } from 'uuid';
 import { DataService } from '../../data/data.service'
 
 @Component({
@@ -31,8 +30,12 @@ export class UserSettingsComponent extends AdminSettings {
   
   constructor(public dialog: MatDialog, private data: DataService) {
     super()
-    this.data.getUsers().subscribe(value => this.dataSource = value)
+    this.updateDataSource()
     this.selection.changed.subscribe(value => {this.selected = value.source.selected; console.log(value.source.selected)});
+  }
+
+  updateDataSource() {
+    this.data.getUsers().subscribe(value => this.dataSource = value)
   }
   
   openDialog(user: User, newlyCreated=false) {
@@ -45,26 +48,28 @@ export class UserSettingsComponent extends AdminSettings {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const index = this.dataSource.findIndex((value: User) => value.id === result.id)
+        const index = this.dataSource.findIndex((value: User) => value._id === result._id)
         if (index !== -1) {
-          this.dataSource[index] = result
+          this.data.updateUser(result).subscribe()
         }
         else {
-          this.dataSource.push(result)
+          result.roles = ['waiter']
+          this.data.addUser(result).subscribe()
         }
-        this.dataSource = [...this.dataSource]
+        this.updateDataSource()
       }
     });
   }
 
   createUser() {
-    // TODO solve how to do with id
-    this.openDialog({id: uuidv4(), name: '', password: '', tags: []}, true)
+    // TODO solve how to do with _id
+    this.openDialog({name: '', hashedPassword: '', password: '', roles: [], tags: []}, true)
   }
 
   deleteUser() {
-    this.selected.forEach(value => {
-      this.dataSource = [...this.dataSource.filter(dataValue => value.id !== dataValue.id)]
+    this.selected.forEach((user: User) => {
+      this.data.deleteUser(user).subscribe()
+      this.dataSource = [...this.dataSource.filter(dataValue => user._id !== dataValue._id)] // TODO Update List except editing
     })
     this.selection.clear()
   }
@@ -104,22 +109,29 @@ export class UserSettingsComponent extends AdminSettings {
     ReactiveFormsModule,
     AsyncPipe,
   ],
+  providers: [DataService],
 })
 export class UserSettingsDialogComponent {
-  user: User
+  user: User;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl('');
   filteredTags: Observable<string[]>;
-  allTags: string[] = ['Essen', 'Trinken']; // TODO ask DB
+  allTags: string[] = [];
 
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
   announcer = inject(LiveAnnouncer);
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { user: User, new?: boolean }) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { user: User; new?: boolean },
+    private dataService: DataService
+  ) {
+    this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
-      map((tag: string | null) => (tag ? this._filter(tag) : this.allTags.slice())),
+      map((tag: string | null) =>
+        tag ? this._filter(tag) : this.allTags.slice()
+      )
     );
     this.user = JSON.parse(JSON.stringify(this.data.user));
   }
@@ -157,6 +169,8 @@ export class UserSettingsDialogComponent {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
+    return this.allTags.filter((tag) =>
+      tag.toLowerCase().includes(filterValue)
+    );
   }
 }

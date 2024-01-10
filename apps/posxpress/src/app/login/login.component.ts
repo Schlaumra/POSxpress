@@ -5,6 +5,8 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 function required(control: AbstractControl): ValidationErrors | null {
   return Validators.required(control) ? { required: true } : null;
@@ -26,10 +28,26 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   login() {
-    console.log("TODO")
+    const val = this.loginForm.value;
+
+    if (val.username && val.password) {
+        this.authService.login(val.username, val.password)
+            .subscribe(
+                () => {
+                  let target = '/'
+                  this.activatedRoute.queryParams.subscribe((params: Params) => {
+                    target = params['redirectTo'] || target
+                    this.router.navigateByUrl(target)
+                  })
+                }
+            );
+    }
   }
 
 } 

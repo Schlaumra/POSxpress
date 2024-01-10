@@ -3,6 +3,7 @@ import { OrderService } from '../order.service';
 import { DataService } from '../../data/data.service';
 import { Order, ProductGroup } from 'libs/interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PrintService } from '../../print/print.service';
 
 @Component({
   selector: 'org-preview.order',
@@ -16,6 +17,7 @@ export class PreviewOrderComponent {
   constructor(
     protected orderStore: OrderService,
     private data: DataService,
+    private printService: PrintService,
     private snackBar: MatSnackBar
   ) {
 
@@ -23,7 +25,7 @@ export class PreviewOrderComponent {
       this.order = this.orderStore.order;
     } else throw Error('Keine Order');
 
-    this.data.getTags().subscribe((value) => (this.tags = value));
+    this.data.getSettings().subscribe((value) => (this.tags = value.tags));
   }
   
   addProduct(productGroup: ProductGroup) {
@@ -84,6 +86,7 @@ export class PreviewOrderComponent {
 
   private _printOrder() {
     console.log("PRINTING", this.order)
+    this.printService.print(this.order)
     this.order.printed = true
     this.orderStore.navigateToState(this.orderStore.state+1)
   }
