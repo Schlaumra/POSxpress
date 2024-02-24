@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataService } from '../data/data.service';
-import { Order } from 'libs/interface';
+import { Order } from '@px/interface';
 
 @Injectable({
   providedIn: 'root'

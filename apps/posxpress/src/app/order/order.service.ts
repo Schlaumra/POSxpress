@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Order, ProductGroup } from 'libs/interface';
+import { Order, ProductGroup } from '@px/interface';
 
 export enum OrderState {
   "table",

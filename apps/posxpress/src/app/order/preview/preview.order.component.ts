@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { OrderService } from '../order.service';
 import { DataService } from '../../data/data.service';
-import { Order, ProductGroup } from 'libs/interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrintService } from '../../print/print.service';
+import { Order, ProductGroup } from '@px/interface';
 
 @Component({
   selector: 'org-preview.order',

@@ -1,6 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core';
 import { AdminSettings } from '../settings'
-import { MODELS, Printer } from '../../../../../../libs/interface';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +16,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatSelectModule } from '@angular/material/select';
 import { DataService } from '../../data/data.service';
 import { PrintService } from '../../print/print.service';
+import { MODELS, Printer } from '@px/interface';
 
 
 @Component({

@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { OrderService, OrderState } from '../order.service';
+import { OrderService } from '../order.service';
 import { DataService } from '../../data/data.service';
-import { Order, ProductGroup } from 'libs/interface';
 import { v4 as uuidv4 } from 'uuid'
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { NgFor } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Order, ProductGroup } from '@px/interface';
 
 @Component({
   selector: 'org-select.order',

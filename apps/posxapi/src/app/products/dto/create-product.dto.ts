@@ -1,4 +1,4 @@
-import { Ingredient } from "libs/interface"
+import { Ingredient } from '@px/interface'
 
 export class CreateProductDto {
     name: string

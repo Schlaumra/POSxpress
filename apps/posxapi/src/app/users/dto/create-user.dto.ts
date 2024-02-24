@@ -1,4 +1,4 @@
-import { Role } from "libs/interface";
+import { Role } from '@px/interface';
 
 export class CreateUserDto {
     name: string;

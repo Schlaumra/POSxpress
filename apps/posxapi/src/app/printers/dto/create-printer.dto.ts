@@ -1,4 +1,4 @@
-import { PrinterModel, PrinterSettings, Status } from "libs/interface"
+import { PrinterModel, PrinterSettings, Status } from '@px/interface'
 
 export class CreatePrinterDto {
     name: string

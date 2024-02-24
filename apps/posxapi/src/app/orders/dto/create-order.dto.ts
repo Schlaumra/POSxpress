@@ -1,4 +1,4 @@
-import { Payment, ProductGroup } from "libs/interface"
+import { Payment, ProductGroup } from "@px/interface"
 
 export class CreateOrderDto {
     table: number

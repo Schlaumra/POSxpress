@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { DataService } from '../../data/data.service';
 import { OrderService } from '../order.service';
-import { Order, Payment, ProductGroup } from 'libs/interface';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { CurrencyPipe, NgFor } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
+import { Order, Payment, ProductGroup } from '@px/interface';
 
 @Component({
   selector: 'org-payment.order',

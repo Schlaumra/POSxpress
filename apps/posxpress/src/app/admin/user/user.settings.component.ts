@@ -13,8 +13,8 @@ import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {NgFor, AsyncPipe} from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
-import { User } from 'libs/interface'
 import { DataService } from '../../data/data.service'
+import { User } from '@px/interface';
 
 @Component({
   selector: 'org-user.settings',
