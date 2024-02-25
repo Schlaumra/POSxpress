@@ -1,6 +1,9 @@
 import { Payment } from '../payment'
 import { ProductGroup } from '../product'
 
+// TODO: Create interfaces for order
+export const orderEntityName = 'orders'
+
 export interface Order {
     _id?: string,
     table: number,

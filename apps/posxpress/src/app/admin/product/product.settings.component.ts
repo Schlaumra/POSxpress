@@ -1,6 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core';
 import { AdminSettings } from '../settings'
-import { Product } from 'libs/interface';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +16,9 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
+import { ProductSettingsService } from './product.settings.service';
 import { DataService } from '../../data/data.service';
+import { ICreateProduct, IProduct } from '@px/interface';
 
 
 @Component({
@@ -28,22 +29,24 @@ import { DataService } from '../../data/data.service';
 export class ProductSettingsComponent extends AdminSettings {
   title = "Benutzer"
   displayedColumns: string[] = ['select', 'name', 'price', 'inStock', 'tags', 'actions'];
-  dataSource: Product[] = [];
-  selection = new SelectionModel<Product>(true, []);
-  selected: Product[] = []
+  dataSource: IProduct[] = [];
+  selection = new SelectionModel<IProduct>(true, []);
+  selected: IProduct[] = []
 
-  constructor(public dialog: MatDialog, private data: DataService) {
+  constructor(public dialog: MatDialog, private productSettingsService: ProductSettingsService) {
     super()
     this.updateDataSource()
     this.selection.changed.subscribe(value => this.selected = value.source.selected);
   }
 
   updateDataSource() {
-    this.data.getProducts().subscribe(value => this.dataSource = value)
+    this.productSettingsService.index().subscribe(value => this.dataSource = value)
   }
 
-  openDialog(product: Product, newlyCreated=false) {
-    const dialogRef = this.dialog.open<any, { product: Product; new: boolean }>(
+  openDialog(product: ICreateProduct, newlyCreated: true): void
+  openDialog(product: IProduct, newlyCreated?: false): void
+  openDialog(product: ICreateProduct | IProduct, newlyCreated=false): void {
+    const dialogRef = this.dialog.open<any, { product: IProduct | ICreateProduct; new: boolean }>(
       ProductSettingsDialogComponent,
       {
         data: {
@@ -56,12 +59,12 @@ export class ProductSettingsComponent extends AdminSettings {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)
       if (result) {
-        const index = this.dataSource.findIndex((value: Product) => value._id === result._id)
+        const index = this.dataSource.findIndex((value: IProduct) => value._id === result._id)
         if (index !== -1) {
-          this.data.updateProduct(result).subscribe()
+          this.productSettingsService.update(result._id, result).subscribe()
         }
         else {
-          this.data.addProduct(result).subscribe()
+          this.productSettingsService.create(result).subscribe()
           this.createProduct()
         }
         this.updateDataSource()
@@ -75,8 +78,8 @@ export class ProductSettingsComponent extends AdminSettings {
   }
 
   deleteProduct() {
-    this.selected.forEach((product: Product) => {
-      this.data.deleteProduct(product).subscribe()
+    this.selected.forEach((product: IProduct) => {
+      this.productSettingsService.delete(product._id).subscribe()
       this.dataSource = [...this.dataSource.filter(dataValue => product._id !== dataValue._id)]
     })
     this.selection.clear()
@@ -124,7 +127,7 @@ export class ProductSettingsComponent extends AdminSettings {
   providers: [DataService],
 })
 export class ProductSettingsDialogComponent {
-  product: Product;
+  product: IProduct;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl('');
   filteredTags: Observable<string[]>;
@@ -136,7 +139,7 @@ export class ProductSettingsDialogComponent {
   announcer = inject(LiveAnnouncer);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { product: Product; new?: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { product: IProduct | ICreateProduct; new?: boolean },
     private dataService: DataService
   ) {
     this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));

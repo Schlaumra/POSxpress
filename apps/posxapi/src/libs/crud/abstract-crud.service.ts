@@ -7,7 +7,7 @@ export abstract class AbstractCrudService<
 > {
   protected abstract model: Model<TSchema>;
   
-  public findAll() {
+  public index() {
     return this.model.find();
   }
 
@@ -15,7 +15,7 @@ export abstract class AbstractCrudService<
     return this.model.create(createEntity);
   }
 
-  public findOne(id: string) {
+  public show(id: string) {
     return this.model.findById(id);
   }
 

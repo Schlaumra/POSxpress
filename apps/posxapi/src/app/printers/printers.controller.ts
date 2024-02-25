@@ -6,15 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
 } from '@nestjs/common';
 import { PrintersService } from './printers.service';
 import { CreatePrinterDto } from './dto/create-printer.dto';
 import { UpdatePrinterDto } from './dto/update-printer.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Order } from '../orders/schemas/order.schema';
+import { printerEntityName } from '@px/interface';
 
-@Controller('printers')
+@Controller(printerEntityName)
 export class PrintersController {
   constructor(private readonly printersService: PrintersService) {}
 
@@ -32,13 +32,13 @@ export class PrintersController {
   @Roles(['waiter'])
   @Get()
   findAll() {
-    return this.printersService.findAll();
+    return this.printersService.index();
   }
 
   @Roles(['waiter'])
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.printersService.findOne(id);
+    return this.printersService.show(id);
   }
 
   @Patch(':id')

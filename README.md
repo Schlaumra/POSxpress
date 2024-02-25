@@ -20,3 +20,7 @@ CRUD entities
 CRUD interfaces
 base = CREATE, UPDATE
 entity = READ
+
+TODO:
+- Abstract edit dialog component
+- Create printer service

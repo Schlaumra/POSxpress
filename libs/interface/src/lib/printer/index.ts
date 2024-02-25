@@ -1,3 +1,5 @@
+export const printerEntityName = 'printers'
+
 export interface Status {
     status: 'Offline' | 'Online',
     msg: string
@@ -14,13 +16,18 @@ export const MODELS = [
 
 export type PrinterModel = "Epson TM-T20III" | "Tickoffice RP820-WUE"
 
-// Main Object
-export interface Printer {
-    _id?: string,
+interface BasePrinter {
     name: string,
     address: string,
     tags: string[],
     model: PrinterModel
     settings?: PrinterSettings,
     status?: Status
+}
+
+export type ICreatePrinter = BasePrinter
+export type IUpdatePrinter = BasePrinter
+
+export interface IPrinter extends BasePrinter {
+    _id: string;
 }

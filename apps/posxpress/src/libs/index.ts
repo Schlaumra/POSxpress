@@ -1,1 +1,0 @@
-export { AbstractCrudService } from './crud'

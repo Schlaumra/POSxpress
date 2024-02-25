@@ -1,54 +1,28 @@
-export abstract class AbstractCrudService {
-    constructor(
-        private httpClient: HttpClient
-      ) { }
-    
-      getUsers(): Observable<User[]> {
-        return this.httpClient.get<User[]>('/api/users')
-      }
-      addUser(user: User): Observable<object> {
-        return this.httpClient.post('/api/users', user)
-      }
-      deleteUser(user: User) {
-        return this.httpClient.delete(`api/users/${user._id}`)
-      }
-      updateUser(user: Partial<User>) {
-        return this.httpClient.patch(`/api/users/${user._id}`, user)
-      }
-    
-    
-      getProducts(): Observable<Product[]> {
-        return this.httpClient.get<Product[]>('/api/products')
-      }
-      addProduct(product: Product): Observable<object> {
-        return this.httpClient.post('/api/products', product)
-      }
-      deleteProduct(product: Product) {
-        return this.httpClient.delete(`api/products/${product._id}`)
-      }
-      updateProduct(product: Partial<Product>) {
-        return this.httpClient.patch(`/api/products/${product._id}`, product)
-      }
-    
-    
-      getPrinters(): Observable<Printer[]> {
-        return this.httpClient.get<Printer[]>('/api/printers')
-      }
-      addPrinter(printer: Printer): Observable<object> {
-        return this.httpClient.post('/api/printers', printer)
-      }
-      deletePrinter(printer: Printer) {
-        return this.httpClient.delete(`api/printers/${printer._id}`)
-      }
-      updatePrinter(printer: Partial<Printer>) {
-        return this.httpClient.patch(`/api/printers/${printer._id}`, printer)
-      }
-      print(printer: Printer, order: Order) {
-        return this.httpClient.post(`api/printers/print/${printer._id}`, order)
-      }
-    
-      
-      getSettings(): Observable<Settings> {
-        return this.httpClient.get<Settings>('/api/settings')
-      }
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const basePath = '/api/'
+
+export abstract class AbstractCrudService<TEntity, TCreateEntity, TUpdateEntity> {
+  private basePath: string
+  
+  constructor(private httpClient: HttpClient, private entityName: string) {
+    this.basePath = basePath
+  }
+
+  public index(): Observable<TEntity[]> {
+    return this.httpClient.get<TEntity[]>(`${this.basePath}/${this.entityName}`)
+  }
+  public create(createEntity: TCreateEntity): Observable<TEntity> {
+    return this.httpClient.post<TEntity>(`${this.basePath}/${this.entityName}`, createEntity);
+  }
+  public show(id: string) {
+    return this.httpClient.get<TEntity>(`${this.basePath}/${this.entityName}/${id}`)
+  }
+  public update(id: string, updateEntity: TUpdateEntity) {
+    return this.httpClient.patch<TEntity>(`${this.basePath}/${this.entityName}/${id}`, updateEntity);
+  }
+  public delete(id: string) {
+    return this.httpClient.delete(`${this.basePath}/${this.entityName}/${id}`);
+  }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Order, Printer, Product, Settings, User } from 'libs/interface';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Order, IPrinter, Settings } from '@px/interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,51 +11,13 @@ export class DataService {
     private httpClient: HttpClient
   ) { }
 
-  getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>('/api/users')
+  getPrinters(): Observable<IPrinter[]> {
+    return this.httpClient.get<IPrinter[]>('/api/printers')
   }
-  addUser(user: User): Observable<object> {
-    return this.httpClient.post('/api/users', user)
-  }
-  deleteUser(user: User) {
-    return this.httpClient.delete(`api/users/${user._id}`)
-  }
-  updateUser(user: Partial<User>) {
-    return this.httpClient.patch(`/api/users/${user._id}`, user)
-  }
-
-
-  getProducts(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>('/api/products')
-  }
-  addProduct(product: Product): Observable<object> {
-    return this.httpClient.post('/api/products', product)
-  }
-  deleteProduct(product: Product) {
-    return this.httpClient.delete(`api/products/${product._id}`)
-  }
-  updateProduct(product: Partial<Product>) {
-    return this.httpClient.patch(`/api/products/${product._id}`, product)
-  }
-
-
-  getPrinters(): Observable<Printer[]> {
-    return this.httpClient.get<Printer[]>('/api/printers')
-  }
-  addPrinter(printer: Printer): Observable<object> {
-    return this.httpClient.post('/api/printers', printer)
-  }
-  deletePrinter(printer: Printer) {
-    return this.httpClient.delete(`api/printers/${printer._id}`)
-  }
-  updatePrinter(printer: Partial<Printer>) {
-    return this.httpClient.patch(`/api/printers/${printer._id}`, printer)
-  }
-  print(printer: Printer, order: Order) {
+  print(printer: IPrinter, order: Order) {
     return this.httpClient.post(`api/printers/print/${printer._id}`, order)
   }
 
-  
   getSettings(): Observable<Settings> {
     return this.httpClient.get<Settings>('/api/settings')
   }

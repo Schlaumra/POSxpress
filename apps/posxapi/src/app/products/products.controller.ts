@@ -11,8 +11,9 @@ import { ProductsService } from './products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateProductDto } from './dto/create-product.dto';
+import { productEntityName } from '@px/interface';
 
-@Controller('products')
+@Controller(productEntityName)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -24,13 +25,13 @@ export class ProductsController {
   @Roles(['waiter'])
   @Get()
   findAll() {
-    return this.productsService.findAll();
+    return this.productsService.index();
   }
 
   @Roles(['waiter'])
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+    return this.productsService.show(id);
   }
 
   @Patch(':id')

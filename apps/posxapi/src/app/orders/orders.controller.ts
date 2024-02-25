@@ -11,8 +11,9 @@ import { OrdersService } from './orders.service';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { orderEntityName } from '@px/interface';
 
-@Controller('orders')
+@Controller(orderEntityName)
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
@@ -25,13 +26,13 @@ export class OrdersController {
   @Roles(['waiter'])
   @Get()
   findAll() {
-    return this.ordersService.findAll();
+    return this.ordersService.index();
   }
 
   @Roles(['waiter'])
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ordersService.findOne(id);
+    return this.ordersService.show(id);
   }
 
   @Patch(':id')

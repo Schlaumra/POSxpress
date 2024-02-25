@@ -16,7 +16,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatSelectModule } from '@angular/material/select';
 import { DataService } from '../../data/data.service';
 import { PrintService } from '../../print/print.service';
-import { MODELS, Printer } from '@px/interface';
+import { MODELS, IPrinter, ICreatePrinter } from '@px/interface';
+import { PrinterSettingsService } from './printer.settings.service'
 
 
 @Component({
@@ -25,18 +26,20 @@ import { MODELS, Printer } from '@px/interface';
   styleUrls: ['./printer.settings.component.scss'],
 })
 export class PrinterSettingsComponent extends AdminSettings {
-  printers: Printer[] = [];
+  printers: IPrinter[] = [];
 
-  constructor(public dialog: MatDialog, private data: DataService) {
+  constructor(public dialog: MatDialog, private printerSettingsService: PrinterSettingsService) {
     super();
     this.updatePrinters();
   }
 
   updatePrinters() {
-    this.data.getPrinters().subscribe((value) => (this.printers = value));
+    this.printerSettingsService.index().subscribe((value) => (this.printers = value));
   }
 
-  openDialog(printer: Printer, newlyCreated = false) {
+  openDialog(printer: ICreatePrinter, newlyCreated: true): void
+  openDialog(printer: IPrinter, newlyCreated?: false): void
+  openDialog(printer: IPrinter, newlyCreated = false): void {
     const dialogRef = this.dialog.open(PrinterSettingsDialogComponent, {
       data: {
         printer: printer,
@@ -44,17 +47,17 @@ export class PrinterSettingsComponent extends AdminSettings {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: (IPrinter) & {code?: 'DELETE'}) => { // TODO: This should also be Icreate
       if (result?.code === 'DELETE') {
-        this.data.deletePrinter(result).subscribe();
+        this.printerSettingsService.delete(result._id).subscribe();
       } else if (result) {
         const index = this.printers.findIndex(
-          (value: Printer) => value._id === result._id
+          (value: IPrinter) => value._id === result._id
         );
         if (index !== -1) {
-          this.data.updatePrinter(result).subscribe();
+          this.printerSettingsService.update(result._id, result).subscribe();
         } else {
-          this.data.addPrinter(result).subscribe();
+          this.printerSettingsService.create(result).subscribe();
         }
       }
       this.updatePrinters();
@@ -91,7 +94,7 @@ export class PrinterSettingsComponent extends AdminSettings {
   providers: [DataService, PrintService]
 })
 export class PrinterSettingsDialogComponent {
-  printer: Printer;
+  printer: IPrinter;
   modelGroups = MODELS;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl('');
@@ -103,7 +106,7 @@ export class PrinterSettingsDialogComponent {
   announcer = inject(LiveAnnouncer);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { printer: Printer; new?: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { printer: IPrinter | ICreatePrinter; new?: boolean },
     private _snackBar: MatSnackBar,
     private dataService: DataService,
     private printService: PrintService

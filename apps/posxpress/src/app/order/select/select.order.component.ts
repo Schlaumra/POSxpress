@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgFor } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Order, ProductGroup } from '@px/interface';
+import { ProductSettingsService } from '../../admin/product/product.settings.service';
 
 @Component({
   selector: 'org-select.order',
@@ -23,6 +24,8 @@ export class SelectOrderComponent {
 
   constructor(
     protected orderStore: OrderService,
+    private productSettingsService: ProductSettingsService,
+    
     private data: DataService,
     public dialog: MatDialog
   ) {
@@ -32,7 +35,7 @@ export class SelectOrderComponent {
     } else throw Error('Keine Order');
 
     this.data.getSettings().subscribe((value) => (this.tags = value.tags));
-    this.data.getProducts().subscribe((value) => {
+    this.productSettingsService.index().subscribe((value) => { // TODO: this should not be the settings service
       if (this.order.productGroups.length === 0) {
         value.forEach((product) =>
           this.order.productGroups.push({
