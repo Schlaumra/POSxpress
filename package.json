@@ -2,7 +2,10 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "format-check": "prettier --check .",
+    "format-fix": "prettier --write ."
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~16.1.0",
