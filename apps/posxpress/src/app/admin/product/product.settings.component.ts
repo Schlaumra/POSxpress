@@ -1,7 +1,17 @@
-import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core';
-import { AdminSettings } from '../settings'
+import {
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { AdminSettings } from '../settings';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,17 +19,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { ProductSettingsService } from './product.settings.service';
 import { DataService } from '../../data/data.service';
 import { ICreateProduct, IProduct } from '@px/interface';
-
 
 @Component({
   selector: 'org-product.settings',
@@ -27,62 +39,79 @@ import { ICreateProduct, IProduct } from '@px/interface';
   styleUrls: ['./product.settings.component.scss'],
 })
 export class ProductSettingsComponent extends AdminSettings {
-  title = "Benutzer"
-  displayedColumns: string[] = ['select', 'name', 'price', 'inStock', 'tags', 'actions'];
+  title = 'Benutzer';
+  displayedColumns: string[] = [
+    'select',
+    'name',
+    'price',
+    'inStock',
+    'tags',
+    'actions',
+  ];
   dataSource: IProduct[] = [];
   selection = new SelectionModel<IProduct>(true, []);
-  selected: IProduct[] = []
+  selected: IProduct[] = [];
 
-  constructor(public dialog: MatDialog, private productSettingsService: ProductSettingsService) {
-    super()
-    this.updateDataSource()
-    this.selection.changed.subscribe(value => this.selected = value.source.selected);
+  constructor(
+    public dialog: MatDialog,
+    private productSettingsService: ProductSettingsService
+  ) {
+    super();
+    this.updateDataSource();
+    this.selection.changed.subscribe(
+      (value) => (this.selected = value.source.selected)
+    );
   }
 
   updateDataSource() {
-    this.productSettingsService.index().subscribe(value => this.dataSource = value)
+    this.productSettingsService
+      .index()
+      .subscribe((value) => (this.dataSource = value));
   }
 
-  openDialog(product: ICreateProduct, newlyCreated: true): void
-  openDialog(product: IProduct, newlyCreated?: false): void
-  openDialog(product: ICreateProduct | IProduct, newlyCreated=false): void {
-    const dialogRef = this.dialog.open<any, { product: IProduct | ICreateProduct; new: boolean }>(
-      ProductSettingsDialogComponent,
-      {
-        data: {
-          product: product,
-          new: newlyCreated,
-        },
-      }
-    );
+  openDialog(product: ICreateProduct, newlyCreated: true): void;
+  openDialog(product: IProduct, newlyCreated?: false): void;
+  openDialog(product: ICreateProduct | IProduct, newlyCreated = false): void {
+    const dialogRef = this.dialog.open<
+      any,
+      { product: IProduct | ICreateProduct; new: boolean }
+    >(ProductSettingsDialogComponent, {
+      data: {
+        product: product,
+        new: newlyCreated,
+      },
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
       if (result) {
-        const index = this.dataSource.findIndex((value: IProduct) => value._id === result._id)
+        const index = this.dataSource.findIndex(
+          (value: IProduct) => value._id === result._id
+        );
         if (index !== -1) {
-          this.productSettingsService.update(result._id, result).subscribe()
+          this.productSettingsService.update(result._id, result).subscribe();
+        } else {
+          this.productSettingsService.create(result).subscribe();
+          this.createProduct();
         }
-        else {
-          this.productSettingsService.create(result).subscribe()
-          this.createProduct()
-        }
-        this.updateDataSource()
+        this.updateDataSource();
       }
     });
   }
 
   createProduct() {
     // TODO solve how to do with id
-    this.openDialog({name: '', price: 0, tags: [], inStock: true}, true)
+    this.openDialog({ name: '', price: 0, tags: [], inStock: true }, true);
   }
 
   deleteProduct() {
     this.selected.forEach((product: IProduct) => {
-      this.productSettingsService.delete(product._id).subscribe()
-      this.dataSource = [...this.dataSource.filter(dataValue => product._id !== dataValue._id)]
-    })
-    this.selection.clear()
+      this.productSettingsService.delete(product._id).subscribe();
+      this.dataSource = [
+        ...this.dataSource.filter((dataValue) => product._id !== dataValue._id),
+      ];
+    });
+    this.selection.clear();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -139,10 +168,13 @@ export class ProductSettingsDialogComponent {
   announcer = inject(LiveAnnouncer);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { product: IProduct | ICreateProduct; new?: boolean },
+    @Inject(MAT_DIALOG_DATA)
+    public data: { product: IProduct | ICreateProduct; new?: boolean },
     private dataService: DataService
   ) {
-    this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));
+    this.dataService
+      .getSettings()
+      .subscribe((value) => (this.allTags = value.tags));
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) =>

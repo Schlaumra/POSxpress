@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AdminSettings } from './settings'
-
+import { AdminSettings } from './settings';
 
 @Component({
   selector: 'org-admin',
@@ -8,5 +7,5 @@ import { AdminSettings } from './settings'
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent extends AdminSettings {
-  title = "Admin Einstellungen"
+  title = 'Admin Einstellungen';
 }

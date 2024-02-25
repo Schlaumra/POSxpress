@@ -6,28 +6,37 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY } from './decorators/public.decorator'
+import { IS_PUBLIC_KEY } from './decorators/public.decorator';
 import { Roles } from './decorators/roles.decorator';
 import { Role } from '@px/interface';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService, private reflector: Reflector, private userService: UsersService) {}
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+    private userService: UsersService
+  ) {}
 
-  private matchRoles(userRoles: Role[], contextRoles: Role[] | undefined): boolean {
-    let matched = false
+  private matchRoles(
+    userRoles: Role[],
+    contextRoles: Role[] | undefined
+  ): boolean {
+    let matched = false;
     // console.log(userRoles, contextRoles)
 
-    matched = userRoles.includes('admin')
+    matched = userRoles.includes('admin');
 
-    if (contextRoles && userRoles.some(userRole => contextRoles.includes(userRole)))
-    {
+    if (
+      contextRoles &&
+      userRoles.some((userRole) => contextRoles.includes(userRole))
+    ) {
       // console.log(true)
-      return true
+      return true;
     }
     // console.log(matched)
-    return matched
+    return matched;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -60,7 +69,7 @@ export class AuthGuard implements CanActivate {
     } catch {
       throw new UnauthorizedException();
     }
-    const user = request['user']
+    const user = request['user'];
     if (!(await this.userService.findOneById(user.sub))) {
       throw new UnauthorizedException();
     }
@@ -69,7 +78,9 @@ export class AuthGuard implements CanActivate {
     return this.matchRoles(user.roles, roles);
   }
 
-  private extractTokenFromHeader(request:  {headers: {authorization?: string}}): string | undefined {
+  private extractTokenFromHeader(request: {
+    headers: { authorization?: string };
+  }): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }

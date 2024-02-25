@@ -18,7 +18,6 @@ function required(control: AbstractControl): ValidationErrors | null {
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-
   // Login form Username and Password
   loginForm = this.formBuilder.group({
     username: [sessionStorage.getItem('username') || '', required],
@@ -37,17 +36,13 @@ export class LoginComponent {
     const val = this.loginForm.value;
 
     if (val.username && val.password) {
-        this.authService.login(val.username, val.password)
-            .subscribe(
-                () => {
-                  let target = '/'
-                  this.activatedRoute.queryParams.subscribe((params: Params) => {
-                    target = params['redirectTo'] || target
-                    this.router.navigateByUrl(target)
-                  })
-                }
-            );
+      this.authService.login(val.username, val.password).subscribe(() => {
+        let target = '/';
+        this.activatedRoute.queryParams.subscribe((params: Params) => {
+          target = params['redirectTo'] || target;
+          this.router.navigateByUrl(target);
+        });
+      });
     }
   }
-
-} 
+}

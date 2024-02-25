@@ -1,22 +1,22 @@
 .login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  justify-content: center;
+
+  .login-form {
+    margin: 20px 0 100px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100%;
-    justify-content: center;
 
-    .login-form {
-        margin: 20px 0 100px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .mat-mdc-form-field {
-            width: 100%;
-        }
-
-        button {
-            width: 100%;
-        }
+    .mat-mdc-form-field {
+      width: 100%;
     }
+
+    button {
+      width: 100%;
+    }
+  }
 }

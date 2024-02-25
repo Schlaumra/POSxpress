@@ -1,5 +1,5 @@
 export class CreateSettingDto {
-    version: number
-    tables: number
-    tags: string[]
+  version: number;
+  tables: number;
+  tags: string[];
 }

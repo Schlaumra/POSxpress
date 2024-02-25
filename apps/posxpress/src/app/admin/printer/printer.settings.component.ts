@@ -1,6 +1,16 @@
-import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core';
-import { AdminSettings } from '../settings'
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { AdminSettings } from '../settings';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +19,10 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AsyncPipe, NgFor } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -17,8 +30,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DataService } from '../../data/data.service';
 import { PrintService } from '../../print/print.service';
 import { MODELS, IPrinter, ICreatePrinter } from '@px/interface';
-import { PrinterSettingsService } from './printer.settings.service'
-
+import { PrinterSettingsService } from './printer.settings.service';
 
 @Component({
   selector: 'org-printer.settings',
@@ -28,17 +40,22 @@ import { PrinterSettingsService } from './printer.settings.service'
 export class PrinterSettingsComponent extends AdminSettings {
   printers: IPrinter[] = [];
 
-  constructor(public dialog: MatDialog, private printerSettingsService: PrinterSettingsService) {
+  constructor(
+    public dialog: MatDialog,
+    private printerSettingsService: PrinterSettingsService
+  ) {
     super();
     this.updatePrinters();
   }
 
   updatePrinters() {
-    this.printerSettingsService.index().subscribe((value) => (this.printers = value));
+    this.printerSettingsService
+      .index()
+      .subscribe((value) => (this.printers = value));
   }
 
-  openDialog(printer: ICreatePrinter, newlyCreated: true): void
-  openDialog(printer: IPrinter, newlyCreated?: false): void
+  openDialog(printer: ICreatePrinter, newlyCreated: true): void;
+  openDialog(printer: IPrinter, newlyCreated?: false): void;
   openDialog(printer: IPrinter, newlyCreated = false): void {
     const dialogRef = this.dialog.open(PrinterSettingsDialogComponent, {
       data: {
@@ -47,21 +64,24 @@ export class PrinterSettingsComponent extends AdminSettings {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: (IPrinter) & {code?: 'DELETE'}) => { // TODO: This should also be Icreate
-      if (result?.code === 'DELETE') {
-        this.printerSettingsService.delete(result._id).subscribe();
-      } else if (result) {
-        const index = this.printers.findIndex(
-          (value: IPrinter) => value._id === result._id
-        );
-        if (index !== -1) {
-          this.printerSettingsService.update(result._id, result).subscribe();
-        } else {
-          this.printerSettingsService.create(result).subscribe();
+    dialogRef
+      .afterClosed()
+      .subscribe((result: IPrinter & { code?: 'DELETE' }) => {
+        // TODO: This should also be Icreate
+        if (result?.code === 'DELETE') {
+          this.printerSettingsService.delete(result._id).subscribe();
+        } else if (result) {
+          const index = this.printers.findIndex(
+            (value: IPrinter) => value._id === result._id
+          );
+          if (index !== -1) {
+            this.printerSettingsService.update(result._id, result).subscribe();
+          } else {
+            this.printerSettingsService.create(result).subscribe();
+          }
         }
-      }
-      this.updatePrinters();
-    });
+        this.updatePrinters();
+      });
   }
 
   addPrinter() {
@@ -91,7 +111,7 @@ export class PrinterSettingsComponent extends AdminSettings {
     ReactiveFormsModule,
     AsyncPipe,
   ],
-  providers: [DataService, PrintService]
+  providers: [DataService, PrintService],
 })
 export class PrinterSettingsDialogComponent {
   printer: IPrinter;
@@ -106,12 +126,15 @@ export class PrinterSettingsDialogComponent {
   announcer = inject(LiveAnnouncer);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { printer: IPrinter | ICreatePrinter; new?: boolean },
+    @Inject(MAT_DIALOG_DATA)
+    public data: { printer: IPrinter | ICreatePrinter; new?: boolean },
     private _snackBar: MatSnackBar,
     private dataService: DataService,
     private printService: PrintService
   ) {
-    this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));
+    this.dataService
+      .getSettings()
+      .subscribe((value) => (this.allTags = value.tags));
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) =>
@@ -159,6 +182,6 @@ export class PrinterSettingsDialogComponent {
 
   testPrinter() {
     this._snackBar.open('Verbindung erfolgreich', '', { duration: 2000 });
-    this.printService.testConnection()
+    this.printService.testConnection();
   }
 }

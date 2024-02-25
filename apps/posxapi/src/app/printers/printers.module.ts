@@ -6,7 +6,7 @@ import { Printer, PrinterSchema } from './schemas/printer.shema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: Printer.name, schema: PrinterSchema}])
+    MongooseModule.forFeature([{ name: Printer.name, schema: PrinterSchema }]),
   ],
   controllers: [PrintersController],
   providers: [PrintersService],

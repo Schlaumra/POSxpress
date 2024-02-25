@@ -2,7 +2,6 @@
 
 A POS software for events
 
-
 ## Developer Notes
 
 CRUD endpoints
@@ -13,6 +12,7 @@ PATCH {entity}/{id}
 DELETE {entity}/{id}
 
 CRUD entities
+
 - product
 - printer
 - order
@@ -22,5 +22,6 @@ base = CREATE, UPDATE
 entity = READ
 
 TODO:
+
 - Abstract edit dialog component
 - Create printer service

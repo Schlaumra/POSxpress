@@ -2,11 +2,11 @@
 <mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="printer.name" required cdkFocusInitial>
+    <input matInput [(ngModel)]="printer.name" required cdkFocusInitial />
   </mat-form-field>
   <mat-form-field>
     <mat-label>IP-Addresse</mat-label>
-    <input matInput [(ngModel)]="printer.address" required>
+    <input matInput [(ngModel)]="printer.address" required />
   </mat-form-field>
   <mat-form-field class="example-chip-list">
     <mat-label>Kategorie</mat-label>
@@ -18,11 +18,19 @@
         </button>
       </mat-chip-row>
     </mat-chip-grid>
-    <input placeholder="Hinzufügen..." #tagsInput [formControl]="tagCtrl"
-      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+    <input
+      placeholder="Hinzufügen..."
+      #tagsInput
+      [formControl]="tagCtrl"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      (matChipInputTokenEnd)="add($event)"/>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      (matChipInputTokenEnd)="add($event)"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
       <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
         {{tag}}
       </mat-option>
@@ -40,8 +48,22 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button [disabled]="!printer.address" (click)="testPrinter()">Verbindung Testen</button>
+  <button mat-button [disabled]="!printer.address" (click)="testPrinter()">
+    Verbindung Testen
+  </button>
   <button mat-button mat-dialog-close>Abrechen</button>
-  <button mat-button [mat-dialog-close]="{code: 'DELETE', _id: printer._id}" [hidden]="data.new">Löschen</button>
-  <button mat-button [mat-dialog-close]="printer" [disabled]="!(printer.name && printer.address)">Speichern</button>
+  <button
+    mat-button
+    [mat-dialog-close]="{code: 'DELETE', _id: printer._id}"
+    [hidden]="data.new"
+  >
+    Löschen
+  </button>
+  <button
+    mat-button
+    [mat-dialog-close]="printer"
+    [disabled]="!(printer.name && printer.address)"
+  >
+    Speichern
+  </button>
 </mat-dialog-actions>

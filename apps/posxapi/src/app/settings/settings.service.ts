@@ -6,13 +6,18 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class SettingsService {
-  constructor(@InjectModel(Settings.name) private settingsModel: Model<Settings>) {}
+  constructor(
+    @InjectModel(Settings.name) private settingsModel: Model<Settings>
+  ) {}
 
   get() {
-    return this.settingsModel.findOne({version: 1})
+    return this.settingsModel.findOne({ version: 1 });
   }
 
   update(updateSettingDto: UpdateSettingDto) {
-    return this.settingsModel.findOneAndUpdate({version: 1}, updateSettingDto)
+    return this.settingsModel.findOneAndUpdate(
+      { version: 1 },
+      updateSettingDto
+    );
   }
 }

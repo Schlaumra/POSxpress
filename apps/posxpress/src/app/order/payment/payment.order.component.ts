@@ -1,7 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { DataService } from '../../data/data.service';
 import { OrderService } from '../order.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,11 +21,11 @@ import { Order, Payment, ProductGroup } from '@px/interface';
   styleUrls: ['./payment.order.component.scss'],
 })
 export class PaymentOrderComponent {
-  categories: {[name: string]: ProductGroup[]} = {
-    'bestellt': [],
-    'teil': [],
-    'bezahlt': [],
-  }
+  categories: { [name: string]: ProductGroup[] } = {
+    bestellt: [],
+    teil: [],
+    bezahlt: [],
+  };
   order: Order;
 
   constructor(
@@ -31,57 +35,83 @@ export class PaymentOrderComponent {
   ) {
     if (this.orderStore.order) {
       this.order = this.orderStore.order;
-      this.categories['bestellt'] = this.order.productGroups.filter(this.orderStore.orderedFilter)
+      this.categories['bestellt'] = this.order.productGroups.filter(
+        this.orderStore.orderedFilter
+      );
     } else throw Error('Keine Order');
   }
 
-  addFromTo(productGroup: ProductGroup, index: number, from: ProductGroup[], to: ProductGroup[]) {
-    let newProductGroup = to.find(value => value.id === productGroup.id)
+  addFromTo(
+    productGroup: ProductGroup,
+    index: number,
+    from: ProductGroup[],
+    to: ProductGroup[]
+  ) {
+    let newProductGroup = to.find((value) => value.id === productGroup.id);
 
     if (!newProductGroup) {
-      newProductGroup = JSON.parse(JSON.stringify(productGroup))
+      newProductGroup = JSON.parse(JSON.stringify(productGroup));
       if (newProductGroup) {
-        newProductGroup.amount = 0
-        to.push(newProductGroup)
+        newProductGroup.amount = 0;
+        to.push(newProductGroup);
       }
     }
 
-    if(newProductGroup) {
+    if (newProductGroup) {
       if (productGroup.amount > 1) {
-        productGroup.amount -= 1
-        newProductGroup.amount += 1
-      }
-      else {
-        from.splice(index, 1)
-        newProductGroup.amount += 1
+        productGroup.amount -= 1;
+        newProductGroup.amount += 1;
+      } else {
+        from.splice(index, 1);
+        newProductGroup.amount += 1;
       }
     }
   }
 
   pay(paymentType: string, productGroups: ProductGroup[]) {
     const dialogRef = this.dialog.open(PayDialogComponent, {
-      data: {paymentType: paymentType, productGroups: productGroups},
+      data: { paymentType: paymentType, productGroups: productGroups },
     });
 
     dialogRef.afterClosed().subscribe((result: Payment | undefined) => {
       if (!!result && result.payedWith > 0 && result.priceToPay > 0) {
-        result.productGroups = [...productGroups]
-        this.categories['bezahlt'].push(...productGroups)
-        productGroups.splice(0, productGroups.length)
-        this.order.payments.push(result)
+        result.productGroups = [...productGroups];
+        this.categories['bezahlt'].push(...productGroups);
+        productGroups.splice(0, productGroups.length);
+        this.order.payments.push(result);
 
-        if (this.categories['bestellt'].length + this.categories['teil'].length === 0 && this.order.payments.length > 0) {
-          this.order.payed = true
+        if (
+          this.categories['bestellt'].length +
+            this.categories['teil'].length ===
+            0 &&
+          this.order.payments.length > 0
+        ) {
+          this.order.payed = true;
         }
       }
-    })
+    });
   }
 
-  addToPartPayment = (productGroup: ProductGroup, index: number) => this.addFromTo(productGroup, index, this.categories['bestellt'], this.categories['teil'])
-  revertToOrdered = (productGroup: ProductGroup, index: number) => this.addFromTo(productGroup, index, this.categories['teil'], this.categories['bestellt'])
+  addToPartPayment = (productGroup: ProductGroup, index: number) =>
+    this.addFromTo(
+      productGroup,
+      index,
+      this.categories['bestellt'],
+      this.categories['teil']
+    );
+  revertToOrdered = (productGroup: ProductGroup, index: number) =>
+    this.addFromTo(
+      productGroup,
+      index,
+      this.categories['teil'],
+      this.categories['bestellt']
+    );
 
   priceReducer(productGroups: ProductGroup[]) {
-    return productGroups.reduce((prev, curr) => (curr.product.price * curr.amount)+prev, 0)
+    return productGroups.reduce(
+      (prev, curr) => curr.product.price * curr.amount + prev,
+      0
+    );
   }
 }
 
@@ -103,10 +133,16 @@ export class PaymentOrderComponent {
   ],
 })
 export class PayDialogComponent {
-  priceToPay = 0
-  payedWith: number | null = null
+  priceToPay = 0;
+  payedWith: number | null = null;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { paymentType: string, productGroups: ProductGroup[] }) {
-    this.priceToPay = this.data.productGroups.reduce((prev, curr) => (curr.product.price * curr.amount)+prev, 0)
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { paymentType: string; productGroups: ProductGroup[] }
+  ) {
+    this.priceToPay = this.data.productGroups.reduce(
+      (prev, curr) => curr.product.price * curr.amount + prev,
+      0
+    );
   }
 }

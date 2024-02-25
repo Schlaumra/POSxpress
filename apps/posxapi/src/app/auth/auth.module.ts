@@ -17,7 +17,7 @@ import { User, UserSchema } from '../users/schemas/user.shema';
       global: true,
       secret: process.env['JWT_TOKEN'],
       signOptions: { expiresIn: '10m' },
-    })
+    }),
   ],
   controllers: [AuthController],
   providers: [

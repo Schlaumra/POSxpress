@@ -11,15 +11,17 @@ import {
   CharacterSet,
 } from 'node-thermal-printer';
 import { from, switchMap, throwError } from 'rxjs';
-import { AbstractCrudService } from '../../libs'
+import { AbstractCrudService } from '../../libs';
 
 @Injectable()
-export class PrintersService extends AbstractCrudService<Printer, CreatePrinterDto, UpdatePrinterDto> {
-  private networkPrinter: ThermalPrinter = null
-  constructor(
-    @InjectModel(Printer.name) protected model: Model<Printer>
-  ) {
-    super()
+export class PrintersService extends AbstractCrudService<
+  Printer,
+  CreatePrinterDto,
+  UpdatePrinterDto
+> {
+  private networkPrinter: ThermalPrinter = null;
+  constructor(@InjectModel(Printer.name) protected model: Model<Printer>) {
+    super();
   }
 
   print(id: string, order: Order) {
@@ -51,7 +53,7 @@ export class PrintersService extends AbstractCrudService<Printer, CreatePrinterD
               this.networkPrinter.drawLine();
               this.networkPrinter.println('');
               this.networkPrinter.println('');
-    
+
               order.productGroups
                 .filter((group) => group.amount > 0)
                 .forEach((product) => {
@@ -60,7 +62,7 @@ export class PrintersService extends AbstractCrudService<Printer, CreatePrinterD
                       product.product.info || ''
                     }`
                   );
-    
+
                   if (product.custom) {
                     this.networkPrinter.println('        ' + product.info);
                   }
@@ -68,13 +70,13 @@ export class PrintersService extends AbstractCrudService<Printer, CreatePrinterD
               this.networkPrinter.println('');
               this.networkPrinter.drawLine();
               this.networkPrinter.cut();
-              return from(this.networkPrinter.execute())
+              return from(this.networkPrinter.execute());
             } else {
-              return throwError(() => new Error('Printer not connected'))
+              return throwError(() => new Error('Printer not connected'));
             }
           })
-        )
+        );
       })
-    )
+    );
   }
 }

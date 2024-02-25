@@ -1,12 +1,17 @@
 <div class="container">
-    <div class="table-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Tischnummer eingeben</mat-label>
-            <input [formControl]="formControl" matInput type="number" autofocus>
-        </mat-form-field>
-        
-        <button mat-fab color="primary" [disabled]="!formControl.valid" (click)="goToSelection()">
-            <mat-icon>chevron_right</mat-icon>
-        </button>
-    </div>
+  <div class="table-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Tischnummer eingeben</mat-label>
+      <input [formControl]="formControl" matInput type="number" autofocus />
+    </mat-form-field>
+
+    <button
+      mat-fab
+      color="primary"
+      [disabled]="!formControl.valid"
+      (click)="goToSelection()"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
 </div>

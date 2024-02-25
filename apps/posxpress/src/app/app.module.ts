@@ -17,7 +17,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { UserSettingsComponent } from './admin/user/user.settings.component';
@@ -28,16 +28,16 @@ import { TableOrderComponent } from './order/table/table.order.component';
 import { PaymentOrderComponent } from './order/payment/payment.order.component';
 import { SelectOrderComponent } from './order/select/select.order.component';
 import { PreviewOrderComponent } from './order/preview/preview.order.component';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './auth/auth.service';
-import { JwtModule } from "@auth0/angular-jwt";
-import { PrintService } from './print/print.service'
-import { AuthInterceptor } from './auth/auth-interceptor'
+import { JwtModule } from '@auth0/angular-jwt';
+import { PrintService } from './print/print.service';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 export function tokenGetter() {
-  return localStorage.getItem("access_token");
+  return localStorage.getItem('access_token');
 }
 
 @NgModule({
@@ -53,7 +53,6 @@ export function tokenGetter() {
     SelectOrderComponent,
     PreviewOrderComponent,
     PaymentOrderComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -84,7 +83,11 @@ export function tokenGetter() {
     MatCardModule,
     MatCheckboxModule,
   ],
-  providers: [AuthService, PrintService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true,  },],
+  providers: [
+    AuthService,
+    PrintService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

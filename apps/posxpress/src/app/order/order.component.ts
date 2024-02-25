@@ -7,15 +7,15 @@ import { OrderService, OrderState } from './order.service';
   styleUrls: ['./order.component.scss'],
 })
 export class OrderComponent {
-  paymentState = OrderState.payment
-  selectState = OrderState.select
+  paymentState = OrderState.payment;
+  selectState = OrderState.select;
   constructor(public orderStore: OrderService) {}
 
   navigateBack() {
-    this.orderStore.navigateToState(this.orderStore.state-1)
+    this.orderStore.navigateToState(this.orderStore.state - 1);
   }
 
   navigateforward() {
-    this.orderStore.navigateToState(this.orderStore.state+1)
+    this.orderStore.navigateToState(this.orderStore.state + 1);
   }
 }

@@ -7,9 +7,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { AbstractCrudService } from '../../libs/';
 
 @Injectable()
-export class ProductsService extends AbstractCrudService<Product, CreateProductDto, UpdateProductDto> {
-
+export class ProductsService extends AbstractCrudService<
+  Product,
+  CreateProductDto,
+  UpdateProductDto
+> {
   constructor(@InjectModel(Product.name) protected model: Model<Product>) {
-    super()
+    super();
   }
 }

@@ -2,11 +2,11 @@
 <mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="user.name" required cdkFocusInitial>
+    <input matInput [(ngModel)]="user.name" required cdkFocusInitial />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Passwort</mat-label>
-    <input matInput [(ngModel)]="user.password" required>
+    <input matInput [(ngModel)]="user.password" required />
   </mat-form-field>
   <mat-form-field class="example-chip-list">
     <mat-label>Zuständigkeiten</mat-label>
@@ -18,11 +18,19 @@
         </button>
       </mat-chip-row>
     </mat-chip-grid>
-    <input placeholder="Hinzufügen..." #tagsInput [formControl]="tagCtrl"
-      [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+    <input
+      placeholder="Hinzufügen..."
+      #tagsInput
+      [formControl]="tagCtrl"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      (matChipInputTokenEnd)="add($event)"/>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      (matChipInputTokenEnd)="add($event)"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
       <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
         {{tag}}
       </mat-option>
@@ -31,5 +39,11 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Abrechen</button>
-  <button mat-button [mat-dialog-close]="user" [disabled]="!(user.name && user.password)">Speichern</button>
+  <button
+    mat-button
+    [mat-dialog-close]="user"
+    [disabled]="!(user.name && user.password)"
+  >
+    Speichern
+  </button>
 </mat-dialog-actions>

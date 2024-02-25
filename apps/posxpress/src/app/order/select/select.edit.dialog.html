@@ -1,24 +1,47 @@
 <h2 mat-dialog-title>{{ productGroup.name }} Optionen</h2>
-<span mat-dialog-content mat-caption [hidden]="!productGroup.product.info">{{ productGroup.product.info }}</span>
+<span mat-dialog-content mat-caption [hidden]="!productGroup.product.info"
+  >{{ productGroup.product.info }}</span
+>
 <mat-dialog-content>
   <mat-form-field>
     <mat-label>Anzahl</mat-label>
-    <input matInput [(ngModel)]="productGroup.amount" type="number" required>
+    <input matInput [(ngModel)]="productGroup.amount" type="number" required />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Notizen</mat-label>
-    <textarea matInput maxlength="50" #text [(ngModel)]="productGroup.product.note"></textarea>
+    <textarea
+      matInput
+      maxlength="50"
+      #text
+      [(ngModel)]="productGroup.product.note"
+    ></textarea>
     <mat-hint align="end">{{text.value.length}}/50</mat-hint>
   </mat-form-field>
   <div>
-    <mat-checkbox matInput *ngFor="let ingredient of productGroup.product.ingredients"
+    <mat-checkbox
+      matInput
+      *ngFor="let ingredient of productGroup.product.ingredients"
       [(ngModel)]="ingredient.contained"
       (change)="ingredient.changed ? ingredient.changed = false : ingredient.changed = true"
-      [style.textDecoration]="ingredient.contained ? '' : 'line-through'">{{ingredient.name}}</mat-checkbox>
+      [style.textDecoration]="ingredient.contained ? '' : 'line-through'"
+      >{{ingredient.name}}</mat-checkbox
+    >
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Abrechen</button>
-  <button mat-button [hidden]="!(productGroup.custom || checkIfSame())" [mat-dialog-close]="{action: 'edit', productGroup: productGroup}"><mat-icon>edit</mat-icon>Bearbeiten</button>
-  <button mat-button [hidden]="checkIfSame()" [mat-dialog-close]="{action: 'add', productGroup: productGroup}"><mat-icon>add</mat-icon>Hinzufügen</button>
+  <button
+    mat-button
+    [hidden]="!(productGroup.custom || checkIfSame())"
+    [mat-dialog-close]="{action: 'edit', productGroup: productGroup}"
+  >
+    <mat-icon>edit</mat-icon>Bearbeiten
+  </button>
+  <button
+    mat-button
+    [hidden]="checkIfSame()"
+    [mat-dialog-close]="{action: 'add', productGroup: productGroup}"
+  >
+    <mat-icon>add</mat-icon>Hinzufügen
+  </button>
 </mat-dialog-actions>

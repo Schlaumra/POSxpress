@@ -6,7 +6,7 @@ export abstract class AbstractCrudService<
   TUpdateEntity extends Partial<TSchema>
 > {
   protected abstract model: Model<TSchema>;
-  
+
   public index() {
     return this.model.find();
   }

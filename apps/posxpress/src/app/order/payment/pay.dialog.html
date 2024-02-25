@@ -5,11 +5,17 @@
   <mat-divider></mat-divider>
   <mat-form-field>
     <mat-label>Gezahlt mit</mat-label>
-    <input matInput type="number" [(ngModel)]="payedWith">
-    <span matSuffix style="margin-right: 10px;">€</span>
+    <input matInput type="number" [(ngModel)]="payedWith" />
+    <span matSuffix style="margin-right: 10px">€</span>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Abrechen</button>
-  <button mat-button [disabled]="(payedWith || 0) < priceToPay && !!payedWith" [mat-dialog-close]="{payedWith: payedWith, priceToPay: priceToPay}"><mat-icon>payments</mat-icon>Zahlen</button>
+  <button
+    mat-button
+    [disabled]="(payedWith || 0) < priceToPay && !!payedWith"
+    [mat-dialog-close]="{payedWith: payedWith, priceToPay: priceToPay}"
+  >
+    <mat-icon>payments</mat-icon>Zahlen
+  </button>
 </mat-dialog-actions>

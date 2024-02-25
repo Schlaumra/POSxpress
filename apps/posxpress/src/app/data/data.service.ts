@@ -4,21 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { Order, IPrinter, Settings } from '@px/interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  constructor(private httpClient: HttpClient) {}
 
   getPrinters(): Observable<IPrinter[]> {
-    return this.httpClient.get<IPrinter[]>('/api/printers')
+    return this.httpClient.get<IPrinter[]>('/api/printers');
   }
   print(printer: IPrinter, order: Order) {
-    return this.httpClient.post(`api/printers/print/${printer._id}`, order)
+    return this.httpClient.post(`api/printers/print/${printer._id}`, order);
   }
 
   getSettings(): Observable<Settings> {
-    return this.httpClient.get<Settings>('/api/settings')
+    return this.httpClient.get<Settings>('/api/settings');
   }
 }

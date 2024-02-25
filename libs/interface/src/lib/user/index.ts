@@ -1,22 +1,23 @@
-export const userEntityName = 'users'
+export const userEntityName = 'users';
 
 export type Role = 'admin' | 'waiter';
 
 interface BaseUser {
-    name: string;
-    hashedPassword: string;
-    password?: string;
-    roles: Role[];
-    tags: string[];
+  name: string;
+  hashedPassword: string;
+  password?: string;
+  roles: Role[];
+  tags: string[];
 }
 
-export type ICreateUser = BaseUser
-export type IUpdateUser = BaseUser
+export type ICreateUser = BaseUser;
+export type IUpdateUser = BaseUser;
 
 export interface IUser extends BaseUser {
-    _id: string;
+  _id: string;
 }
 
-export interface LoginUser {
-    
-}
+// TODO: What to do with that
+// export interface LoginUser {
+
+// }

@@ -1,1 +1,1 @@
-export {AbstractCrudService} from './abstract-crud.service'
+export { AbstractCrudService } from './abstract-crud.service';

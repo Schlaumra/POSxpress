@@ -6,20 +6,20 @@ export type ProductDocument = HydratedDocument<Product>;
 
 @Schema()
 export class Product {
-    @Prop()
-    name: string
-    @Prop()
-    price: number
-    @Prop()
-    tags: string[]
-    @Prop()
-    inStock: boolean
-    @Prop()
-    ingredients?: Ingredient[] // TODO add Ingredient Schema
-    @Prop({})
-    info?: string
-    @Prop()
-    note?: string
+  @Prop()
+  name: string;
+  @Prop()
+  price: number;
+  @Prop()
+  tags: string[];
+  @Prop()
+  inStock: boolean;
+  @Prop()
+  ingredients?: Ingredient[]; // TODO add Ingredient Schema
+  @Prop({})
+  info?: string;
+  @Prop()
+  note?: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

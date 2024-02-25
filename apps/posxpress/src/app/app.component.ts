@@ -1,27 +1,24 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import {MediaMatcher} from '@angular/cdk/layout';
+import { MediaMatcher } from '@angular/cdk/layout';
 import { BehaviorSubject } from 'rxjs';
 
-
 interface link {
-  name: string,
-  link: string
+  name: string;
+  link: string;
 }
-
-
 
 @Component({
   selector: 'org-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'posxpress';
-  links: BehaviorSubject<link[]> = new BehaviorSubject<link[]>([])
-  links$ = this.links.asObservable()
+  links: BehaviorSubject<link[]> = new BehaviorSubject<link[]>([]);
+  links$ = this.links.asObservable();
   mobileQuery: MediaQueryList;
 
-  fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
+  fillerNav = Array.from({ length: 50 }, (_, i) => `Nav Item ${i + 1}`);
 
   private _mobileQueryListener: () => void;
 
@@ -31,10 +28,10 @@ export class AppComponent {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  onRouterOutletActivate(event : any) {
-    this.title = event.title || this.title
-    this.links.next(event.links || [])
-}
+  onRouterOutletActivate(event: any) {
+    this.title = event.title || this.title;
+    this.links.next(event.links || []);
+  }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);

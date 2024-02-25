@@ -1,19 +1,32 @@
-import { Component, ElementRef, Inject, ViewChild, inject } from '@angular/core';
-import { AdminSettings } from '../settings'
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { AdminSettings } from '../settings';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatAutocompleteSelectedEvent, MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteModule,
+} from '@angular/material/autocomplete';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable, map, startWith } from 'rxjs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import {NgFor, AsyncPipe} from '@angular/common';
+import { NgFor, AsyncPipe } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
-import { DataService } from '../../data/data.service'
+import { DataService } from '../../data/data.service';
 import { ICreateUser, IUser } from '@px/interface';
 import { UserSettingsService } from './user.settings.service';
 
@@ -23,58 +36,80 @@ import { UserSettingsService } from './user.settings.service';
   styleUrls: ['./user.settings.component.scss'],
 })
 export class UserSettingsComponent extends AdminSettings {
-  title = "Benutzer"
-  displayedColumns: string[] = ['select', 'name', 'password', 'tags', 'actions'];
+  title = 'Benutzer';
+  displayedColumns: string[] = [
+    'select',
+    'name',
+    'password',
+    'tags',
+    'actions',
+  ];
   dataSource: IUser[] = [];
   selection = new SelectionModel<IUser>(true, []);
-  selected: IUser[] = []
-  
-  constructor(public dialog: MatDialog, private data: DataService, private userSettingsService: UserSettingsService) {
-    super()
-    this.updateDataSource()
-    this.selection.changed.subscribe(value => {this.selected = value.source.selected; console.log(value.source.selected)});
+  selected: IUser[] = [];
+
+  constructor(
+    public dialog: MatDialog,
+    private data: DataService,
+    private userSettingsService: UserSettingsService
+  ) {
+    super();
+    this.updateDataSource();
+    this.selection.changed.subscribe((value) => {
+      this.selected = value.source.selected;
+      console.log(value.source.selected);
+    });
   }
 
   updateDataSource() {
-    this.userSettingsService.index().subscribe(value => this.dataSource = value)
+    this.userSettingsService
+      .index()
+      .subscribe((value) => (this.dataSource = value));
   }
-  
-  openDialog(user: ICreateUser, newlyCreated: true): void
-  openDialog(user: IUser, newlyCreated?: false): void
-  openDialog(user: IUser | ICreateUser, newlyCreated=false): void {
+
+  openDialog(user: ICreateUser, newlyCreated: true): void;
+  openDialog(user: IUser, newlyCreated?: false): void;
+  openDialog(user: IUser | ICreateUser, newlyCreated = false): void {
     const dialogRef = this.dialog.open(UserSettingsDialogComponent, {
       data: {
         user: user,
-        new: newlyCreated
+        new: newlyCreated,
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: IUser) => { // TODO: This is also Create
+    dialogRef.afterClosed().subscribe((result: IUser) => {
+      // TODO: This is also Create
       if (result) {
-        const index = this.dataSource.findIndex((value: IUser) => value._id === result._id)
+        const index = this.dataSource.findIndex(
+          (value: IUser) => value._id === result._id
+        );
         if (index !== -1) {
-          this.userSettingsService.update(result._id, result).subscribe()
+          this.userSettingsService.update(result._id, result).subscribe();
+        } else {
+          result.roles = ['waiter'];
+          this.userSettingsService.create(result).subscribe();
         }
-        else {
-          result.roles = ['waiter']
-          this.userSettingsService.create(result).subscribe()
-        }
-        this.updateDataSource()
+        this.updateDataSource();
       }
     });
   }
 
   createUser() {
     // TODO solve how to do with _id
-    this.openDialog({name: '', hashedPassword: '', password: '', roles: [], tags: []}, true)
+    this.openDialog(
+      { name: '', hashedPassword: '', password: '', roles: [], tags: [] },
+      true
+    );
   }
 
   deleteUser() {
     this.selected.forEach((user: IUser) => {
-      this.userSettingsService.delete(user._id).subscribe()
-      this.dataSource = [...this.dataSource.filter(dataValue => user._id !== dataValue._id)] // TODO Update List except editing
-    })
-    this.selection.clear()
+      this.userSettingsService.delete(user._id).subscribe();
+      this.dataSource = [
+        ...this.dataSource.filter((dataValue) => user._id !== dataValue._id),
+      ]; // TODO Update List except editing
+    });
+    this.selection.clear();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -126,10 +161,13 @@ export class UserSettingsDialogComponent {
   announcer = inject(LiveAnnouncer);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { user: IUser | ICreateUser; new?: boolean },
+    @Inject(MAT_DIALOG_DATA)
+    public data: { user: IUser | ICreateUser; new?: boolean },
     private dataService: DataService
   ) {
-    this.dataService.getSettings().subscribe((value) => (this.allTags = value.tags));
+    this.dataService
+      .getSettings()
+      .subscribe((value) => (this.allTags = value.tags));
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) =>

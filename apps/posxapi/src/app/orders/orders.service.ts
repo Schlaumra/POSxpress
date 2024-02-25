@@ -7,8 +7,12 @@ import { Model } from 'mongoose';
 import { AbstractCrudService } from '../../libs';
 
 @Injectable()
-export class OrdersService extends AbstractCrudService<Order, CreateOrderDto, UpdateOrderDto> {
+export class OrdersService extends AbstractCrudService<
+  Order,
+  CreateOrderDto,
+  UpdateOrderDto
+> {
   constructor(@InjectModel(Order.name) protected model: Model<Order>) {
-    super()
+    super();
   }
 }
