@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@px/client-crud": ["apps/posxpress/src/libs/client-crud/src/index.ts"],
       "@px/interface": ["libs/interface/src/index.ts"]
     }
   },

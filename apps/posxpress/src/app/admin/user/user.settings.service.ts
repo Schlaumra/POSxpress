@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractCrudService } from '../../../libs/crud';
+import { AbstractCrudService } from '@px/client-crud';
 import { HttpClient } from '@angular/common/http';
 import { ICreateUser, IUser, IUpdateUser, userEntityName } from '@px/interface';
 
