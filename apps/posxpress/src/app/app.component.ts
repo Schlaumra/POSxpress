@@ -8,7 +8,7 @@ interface link {
 }
 
 @Component({
-  selector: 'org-root',
+  selector: 'px-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

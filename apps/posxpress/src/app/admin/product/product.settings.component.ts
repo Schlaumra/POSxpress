@@ -34,7 +34,7 @@ import { DataService } from '../../data/data.service';
 import { ICreateProduct, IProduct } from '@px/interface';
 
 @Component({
-  selector: 'org-product.settings',
+  selector: 'px-product.settings',
   templateUrl: './product.settings.component.html',
   styleUrls: ['./product.settings.component.scss'],
 })
@@ -133,7 +133,7 @@ export class ProductSettingsComponent extends AdminSettings {
 }
 
 @Component({
-  selector: 'org-product.settings.dialog',
+  selector: 'px-product.settings.dialog',
   templateUrl: 'product.edit.dialog.html',
   standalone: true,
   imports: [

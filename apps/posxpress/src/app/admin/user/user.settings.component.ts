@@ -31,7 +31,7 @@ import { ICreateUser, IUser } from '@px/interface';
 import { UserSettingsService } from './user.settings.service';
 
 @Component({
-  selector: 'org-user.settings',
+  selector: 'px-user.settings',
   templateUrl: './user.settings.component.html',
   styleUrls: ['./user.settings.component.scss'],
 })
@@ -131,7 +131,7 @@ export class UserSettingsComponent extends AdminSettings {
 }
 
 @Component({
-  selector: 'org-user.settings.dialog',
+  selector: 'px-user.settings.dialog',
   templateUrl: 'user.edit.dialog.html',
   standalone: true,
   imports: [

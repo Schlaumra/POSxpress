@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OrderService, OrderState } from './order.service';
 
 @Component({
-  selector: 'org-order',
+  selector: 'px-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
 })

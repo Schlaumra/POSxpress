@@ -6,7 +6,7 @@ import { PrintService } from '../../print/print.service';
 import { Order, ProductGroup } from '@px/interface';
 
 @Component({
-  selector: 'org-preview.order',
+  selector: 'px-preview.order',
   templateUrl: './preview.order.component.html',
   styleUrls: ['./preview.order.component.scss'],
 })

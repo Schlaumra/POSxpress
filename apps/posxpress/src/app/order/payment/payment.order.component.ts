@@ -16,7 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Order, Payment, ProductGroup } from '@px/interface';
 
 @Component({
-  selector: 'org-payment.order',
+  selector: 'px-payment.order',
   templateUrl: './payment.order.component.html',
   styleUrls: ['./payment.order.component.scss'],
 })
@@ -116,7 +116,7 @@ export class PaymentOrderComponent {
 }
 
 @Component({
-  selector: 'org-pay.dialog',
+  selector: 'px-pay.dialog',
   templateUrl: 'pay.dialog.html',
   standalone: true,
   imports: [

@@ -18,7 +18,7 @@ import { Order, ProductGroup } from '@px/interface';
 import { ProductSettingsService } from '../../admin/product/product.settings.service';
 
 @Component({
-  selector: 'org-select.order',
+  selector: 'px-select.order',
   templateUrl: './select.order.component.html',
   styleUrls: ['./select.order.component.scss'],
 })
@@ -132,7 +132,7 @@ export class SelectOrderComponent {
 }
 
 @Component({
-  selector: 'org-select.edit.dialog',
+  selector: 'px-select.edit.dialog',
   templateUrl: 'select.edit.dialog.html',
   standalone: true,
   imports: [

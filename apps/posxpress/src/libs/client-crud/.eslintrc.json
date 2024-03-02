@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "org",
+            "prefix": "px",
             "style": "camelCase"
           }
         ],
@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "org",
+            "prefix": "px",
             "style": "kebab-case"
           }
         ]

@@ -33,7 +33,7 @@ import { MODELS, IPrinter, ICreatePrinter } from '@px/interface';
 import { PrinterSettingsService } from './printer.settings.service';
 
 @Component({
-  selector: 'org-printer.settings',
+  selector: 'px-printer.settings',
   templateUrl: './printer.settings.component.html',
   styleUrls: ['./printer.settings.component.scss'],
 })
@@ -93,7 +93,7 @@ export class PrinterSettingsComponent extends AdminSettings {
 }
 
 @Component({
-  selector: 'org-printer.settings.dialog',
+  selector: 'px-printer.settings.dialog',
   templateUrl: 'printer.edit.dialog.html',
   standalone: true,
   imports: [

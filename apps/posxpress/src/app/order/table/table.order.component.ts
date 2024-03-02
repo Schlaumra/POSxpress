@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
 const MIN = 1;
 
 @Component({
-  selector: 'org-table.order',
+  selector: 'px-table.order',
   templateUrl: './table.order.component.html',
   styleUrls: ['./table.order.component.scss'],
 })

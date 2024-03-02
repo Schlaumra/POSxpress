@@ -13,7 +13,7 @@ function required(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  selector: 'org-login',
+  selector: 'px-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })

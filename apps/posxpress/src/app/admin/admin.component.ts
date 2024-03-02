@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AdminSettings } from './settings';
 
 @Component({
-  selector: 'org-admin',
+  selector: 'px-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
