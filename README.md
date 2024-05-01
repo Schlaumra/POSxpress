@@ -23,5 +23,6 @@ entity = READ
 
 TODO:
 
-- Abstract edit dialog component
+- Abstract crud table view
 - Create printer service
+- Make everything readonly
