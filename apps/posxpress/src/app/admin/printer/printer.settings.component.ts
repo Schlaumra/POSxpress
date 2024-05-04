@@ -56,7 +56,7 @@ export class PrinterSettingsComponent extends AdminSettings {
           case DialogCode.EDIT:
             //TODO: Handle ENTITY NOT FOUND
             this.printerSettingsService
-              .update(result.data._id, result.data)
+              .update(result.original._id, result.data)
               .subscribe();
             break;
           case DialogCode.DELETE:

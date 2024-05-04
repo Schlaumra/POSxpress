@@ -1,12 +1,7 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AsyncPipe, NgFor } from '@angular/common';
 import {
   Component,
-  ElementRef,
-  Inject,
-  ViewChild,
-  inject,
+  Inject
 } from '@angular/core';
 import {
   FormControl,
@@ -16,19 +11,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -38,9 +27,10 @@ import {
   CrudOpenContext,
 } from '@px/client-crud';
 import { IPrinter, MODELS } from '@px/interface';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { DataService } from '../../data/data.service';
 import { PrintService } from '../../print/print.service';
+import { FormTagSelectComponent } from '@px/client-forms';
 
 export type IPrinterOpenContext = CrudOpenContext<IPrinter>
 
@@ -61,12 +51,10 @@ interface printerControl {
     MatButtonModule,
     FormsModule,
     MatFormFieldModule,
-    MatChipsModule,
+    FormTagSelectComponent,
     MatSnackBarModule,
     MatSelectModule,
     NgFor,
-    MatIconModule,
-    MatAutocompleteModule,
     ReactiveFormsModule,
     AsyncPipe,
     CrudDialogComponent,
@@ -77,15 +65,8 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
   IPrinterOpenContext,
   printerControl
 > {
+  protected allTags$: Observable<string[]>
   modelGroups = MODELS;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl('');
-  filteredTags: Observable<string[]>;
-  allTags: string[] = [];
-
-  @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
-
-  announcer = inject(LiveAnnouncer);
 
   protected crudForm: FormGroup<printerControl> = this.formBuilder.group({
     name: ['', Validators.required],
@@ -94,15 +75,16 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
     model: ['RP820-WUE', Validators.required],
   });
   constructor(
+    protected dialogRef: MatDialogRef<PrinterSettingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    protected printerContext: IPrinterOpenContext,
+    protected context: IPrinterOpenContext,
     private formBuilder: NonNullableFormBuilder,
     private _snackBar: MatSnackBar,
     private dataService: DataService,
     private printService: PrintService
   ) {
     super();
-    const {data, edit} = printerContext
+    const {data, edit} = context
     if(edit) {
       this.crudForm.setValue({
         name: data.name,
@@ -112,53 +94,16 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
       });
     }
 
-    this.dataService
-      .getSettings()
-      .subscribe((value) => (this.allTags = value.tags));
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) =>
-        tag ? this._filter(tag) : this.allTags.slice()
-      )
-    );
+    this.printer.tags
+
+    this.allTags$ = this.dataService
+    .getSettings().pipe(
+      map(settings => settings.tags)
+    )
   }
 
   public get printer() {
     return this.crudForm.value
-  }
-  
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    this.printer.tags?.push(value);
-    event.chipInput?.clear();
-
-    this.tagCtrl.setValue(null);
-  }
-
-  remove(tag: string): void {
-    const index = this.printer.tags?.indexOf(tag);
-
-    if (index !== undefined && index >= 0) {
-      this.printer.tags?.splice(index, 1);
-
-      this.announcer.announce(`Removed ${tag}`);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.printer.tags?.push(event.option.viewValue);
-    this.tagsInput.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allTags.filter((tag) =>
-      tag.toLowerCase().includes(filterValue)
-    );
   }
 
   testPrinter() {

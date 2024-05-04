@@ -3,7 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { AbstractDialogService } from '@px/client-dialog';
 import { Observable, map } from 'rxjs';
 
-export interface CrudOpenContext<TData> {
+export interface CrudEntity {
+  _id: string;
+}
+
+export interface CrudOpenContext<TData extends CrudEntity> {
   readonly data: TData;
   readonly edit: boolean;
 }
@@ -18,6 +22,7 @@ export enum DialogCode {
 interface GenericContext<TData, Code extends DialogCode = DialogCode> {
   readonly code: Code;
   readonly data: TData;
+  readonly original: TData
 }
 
 type CreateContext<TData> = GenericContext<TData, DialogCode.CREATE>
@@ -28,7 +33,7 @@ type CancelContext = GenericContext<undefined, DialogCode.CANCEL>
 export type CrudCloseContext<TData> = CreateContext<TData> | EditContext<TData> | DeleteContext<TData> | CancelContext
 
 export class CrudDialogService<
-  TData,
+  TData extends CrudEntity,
   TDialogComponent,
   TOpenContext extends CrudOpenContext<TData> = CrudOpenContext<TData>,
 > extends AbstractDialogService<TDialogComponent, TOpenContext, CrudCloseContext<TData>> {
@@ -43,7 +48,7 @@ export class CrudDialogService<
     return super.openDialog(context).pipe(
       map((result) => {
         if (result?.code === DialogCode.CANCEL || !result) {
-          return { data: undefined, code: DialogCode.CANCEL };
+          return { data: undefined, code: DialogCode.CANCEL, original: undefined };
         } else {
           return result;
         }

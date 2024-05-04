@@ -1,6 +1,6 @@
 <form [formGroup]="crudForm">
 <px-crud-dialog [crudForm]="crudForm">
-  <span crud-dialog-title>Drucker {{ printerContext.edit ? 'bearbeiten' : 'hinzufügen' }}</span>
+  <span crud-dialog-title>Drucker {{ context.edit ? 'bearbeiten' : 'hinzufügen' }}</span>
   
   <mat-form-field>
     <mat-label>Name</mat-label>
@@ -10,34 +10,7 @@
     <mat-label>IP-Addresse</mat-label>
     <input matInput formControlName="address" required />
   </mat-form-field>
-  <mat-form-field class="example-chip-list">
-    <mat-label>Kategorie</mat-label>
-    <mat-chip-grid #chipGrid formControlName="tags">
-      <mat-chip-row *ngFor="let tag of printer.tags" (removed)="remove(tag)">
-        {{tag}}
-        <button matChipRemove [attr.aria-label]="'remove ' + tag">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-    </mat-chip-grid>
-    <input
-      placeholder="Hinzufügen..."
-      #tagsInput
-      [formControl]="tagCtrl"
-      [matChipInputFor]="chipGrid"
-      [matAutocomplete]="auto"
-      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      (matChipInputTokenEnd)="add($event)"
-    />
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      (optionSelected)="selected($event)"
-    >
-      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-        {{tag}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+  <px-form-tag-select [allTags]="(allTags$ | async) || []" [tags]="printer.tags"></px-form-tag-select>
   <mat-form-field>
     <mat-label>Modell</mat-label>
     <mat-select formControlName="model">

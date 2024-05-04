@@ -5,7 +5,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, Inject, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AbstractDialog } from '@px/client-dialog';
-import { CrudCloseContext, CrudOpenContext, DialogCode } from './crud-dialog.service';
+import { CrudCloseContext, CrudEntity, CrudOpenContext, DialogCode } from './crud-dialog.service';
 
 @Component({
   selector: 'px-crud-dialog',
@@ -13,19 +13,20 @@ import { CrudCloseContext, CrudOpenContext, DialogCode } from './crud-dialog.ser
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, AsyncPipe, ReactiveFormsModule],
 })
-export class CrudDialogComponent<TData> extends AbstractDialog<CrudOpenContext<TData>, CrudDialogComponent<TData>>{
+export class CrudDialogComponent<TData extends CrudEntity> extends AbstractDialog<CrudOpenContext<TData>, CrudDialogComponent<TData>>{
   @Input({required: true})
   public crudForm!: FormGroup
   
   constructor(
     protected dialogRef: MatDialogRef<CrudDialogComponent<TData>, CrudCloseContext<TData>>,
-    @Inject(MAT_DIALOG_DATA) protected printerContext: CrudOpenContext<TData>,
+    @Inject(MAT_DIALOG_DATA) protected context: CrudOpenContext<TData>,
   ) {
     super();
   }
 
   public save() {
-    const code = this.printerContext.edit ? DialogCode.EDIT : DialogCode.CREATE
-    this.dialogRef.close({ data: this.crudForm.value, code})
+    const code = this.context.edit ? DialogCode.EDIT : DialogCode.CREATE
+    // TODO: Data should be crudFormGroupInterface
+    this.dialogRef.close({ data: this.crudForm.value, code, original: this.context.data})
   }
 }
