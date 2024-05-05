@@ -29,4 +29,8 @@ export class CrudDialogComponent<TData extends CrudEntity> extends AbstractDialo
     // TODO: Data should be crudFormGroupInterface
     this.dialogRef.close({ data: this.crudForm.value, code, original: this.context.data})
   }
+
+  public remove() {
+    this.dialogRef.close({ data: this.crudForm.value, code: DialogCode.DELETE, original: this.context.data })
+  }
 }

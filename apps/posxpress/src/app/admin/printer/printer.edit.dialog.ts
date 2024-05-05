@@ -72,7 +72,7 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
     name: ['', Validators.required],
     address: ['', Validators.required],
     tags: [new Array<string>],
-    model: ['RP820-WUE', Validators.required],
+    model: ['', Validators.required],
   });
   constructor(
     protected dialogRef: MatDialogRef<PrinterSettingsDialogComponent>,
@@ -93,8 +93,6 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
         tags: data.tags,
       });
     }
-
-    this.printer.tags
 
     this.allTags$ = this.dataService
     .getSettings().pipe(

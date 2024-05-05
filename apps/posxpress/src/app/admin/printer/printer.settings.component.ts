@@ -13,11 +13,12 @@ import { PrinterSettingsDialogComponent } from './printer.edit.dialog';
   providers: [
     {
       provide: CrudDialogService,
-      deps: [MatDialog],
-      useFactory: (matDialog: MatDialog) =>
+      deps: [MatDialog, PrinterSettingsService],
+      useFactory: (matDialog: MatDialog, printerSettingsService: PrinterSettingsService) =>
         new CrudDialogService<IPrinter, PrinterSettingsDialogComponent>(
           matDialog,
-          PrinterSettingsDialogComponent
+          PrinterSettingsDialogComponent,
+          printerSettingsService
         ),
     },
   ],
@@ -47,32 +48,12 @@ export class PrinterSettingsComponent extends AdminSettings {
   openDialog(printer: IPrinter, edit = true): void {
     this.crudDialogService
       .openCrudDialog({ data: printer, edit })
-      .subscribe((result) => {
-        console.log(result)
-        switch (result.code) {
-          case DialogCode.CREATE:
-            this.printerSettingsService.create(result.data).subscribe();
-            break;
-          case DialogCode.EDIT:
-            //TODO: Handle ENTITY NOT FOUND
-            this.printerSettingsService
-              .update(result.original._id, result.data)
-              .subscribe();
-            break;
-          case DialogCode.DELETE:
-            //TODO: Handle ENTITY NOT FOUND
-            this.printerSettingsService.delete(result.data._id).subscribe();
-            break;
-          case DialogCode.CANCEL:
-          default:
-            break;
-        }
-        this.updatePrinters();
-      });
+      .subscribe(() => this.updatePrinters());
   }
 
   addPrinter() {
     this.openDialog(
+      // TODO: model is not selected correctly
       { name: '', address: '', model: 'Epson TM-T20III', tags: [] },
       false
     );
