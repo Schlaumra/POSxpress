@@ -11,6 +11,9 @@ import { Observable, map, startWith } from 'rxjs';
 @Component({
   selector: 'px-form-tag-select',
   templateUrl: 'form-tag-select.component.html',
+  styleUrls: [
+    'form-tag-select.component.scss'
+  ],
   standalone: true,
   imports: [
     MatInputModule,

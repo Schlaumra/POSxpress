@@ -10,6 +10,9 @@ import { CrudCloseContext, CrudEntity, CrudOpenContext, DialogCode } from './cru
 @Component({
   selector: 'px-crud-dialog',
   templateUrl: 'crud-dialog.component.html',
+  styleUrls: [
+    'crud-dialog.component.scss'
+  ],
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, AsyncPipe, ReactiveFormsModule],
 })
