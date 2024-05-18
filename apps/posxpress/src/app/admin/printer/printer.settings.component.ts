@@ -54,6 +54,7 @@ export class PrinterSettingsComponent extends AdminSettings {
   addPrinter() {
     this.openDialog(
       // TODO: model is not selected correctly
+      // Maybe because the context is not used on !edit
       { name: '', address: '', model: 'Epson TM-T20III', tags: [] },
       false
     );
