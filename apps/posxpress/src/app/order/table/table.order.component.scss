@@ -7,9 +7,16 @@
 
   .table-container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    button {
-      margin-left: 15px;
+    .table-input {
+      font-size: 2em;
+      text-align: center;
+    }
+
+    .confirm {
+      font-size: 5em;
     }
   }
 }

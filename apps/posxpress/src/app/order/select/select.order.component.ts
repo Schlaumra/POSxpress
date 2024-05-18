@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Order, ProductGroup } from '@px/interface';
 import { ProductSettingsService } from '../../admin/product/product.settings.service';
@@ -134,12 +134,14 @@ export class SelectOrderComponent {
 @Component({
   selector: 'px-select.edit.dialog',
   templateUrl: 'select.edit.dialog.html',
+  styleUrls: ['select.edit.dialog.scss'],
   standalone: true,
   imports: [
     MatDialogModule,
     MatInputModule,
     MatButtonModule,
     FormsModule,
+    NgIf,
     MatFormFieldModule,
     MatIconModule,
     MatCheckboxModule,

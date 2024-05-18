@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { OrderService, OrderState } from '../order.service';
 import { DataService } from '../../data/data.service';
@@ -14,22 +14,19 @@ const MIN = 1;
 })
 export class TableOrderComponent {
   tableNumber = 0;
-  formControl = new FormControl<number | null>(null);
+  formControl = this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(MIN)])
 
   constructor(
-    private router: Router,
     private orderStore: OrderService,
     private data: DataService,
-    private authService: AuthService
+    private authService: AuthService,
+    private formBuilder: NonNullableFormBuilder
   ) {
     this.orderStore.state = OrderState.table;
     this.data.getSettings().subscribe((value) => {
-      console.log(value);
       this.tableNumber = value.tables;
-      this.formControl.setValidators([
-        Validators.required,
+      this.formControl.addValidators([
         Validators.max(this.tableNumber),
-        Validators.min(MIN),
       ]);
     });
     this.formControl.valueChanges.subscribe((value) => {

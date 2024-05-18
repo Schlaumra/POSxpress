@@ -1,6 +1,6 @@
 <div class="view" [class.is-mobile]="mobileQuery.matches">
   <mat-toolbar color="primary" class="toolbar">
-    <button mat-icon-button (click)="snav.toggle()">
+    <button mat-icon-button (click)="snav.toggle()" *ngIf="(links$ | async)?.length ?? 0 > 0">
       <mat-icon>menu</mat-icon>
     </button>
     <h1 class="app-name">{{ title }}</h1>
