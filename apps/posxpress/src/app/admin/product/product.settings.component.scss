@@ -1,3 +1,14 @@
+.actions {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
 .outOfStock {
   background-color: red;
+}
+
+.action-column {
+  text-align: end;
 }

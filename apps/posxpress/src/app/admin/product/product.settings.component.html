@@ -1,32 +1,23 @@
 <div class="products">
-  <button mat-flat-button (click)="createProduct()" color="primary">
-    Hinzufügen
-  </button>
-  <button
-    mat-flat-button
-    (click)="deleteProduct()"
-    color="warn"
-    [disabled]="selected.length < 1"
-  >
-    Löschen
-  </button>
+  <div class="actions">
+    <button mat-flat-button (click)="createProduct()" color="primary">
+      Hinzufügen
+    </button>
+    <button mat-flat-button (click)="deleteProduct()" color="warn" [disabled]="selected.length < 1">
+      Löschen
+    </button>
+  </div>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <!-- Selection Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
-          (change)="$event ? toggleAllRows() : null"
-          [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"
-        >
+        <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox
-          (click)="$event.stopPropagation()"
-          (change)="$event ? selection.toggle(element) : null"
-          [checked]="selection.isSelected(element)"
-        >
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null"
+          [checked]="selection.isSelected(element)">
         </mat-checkbox>
       </td>
     </ng-container>
@@ -60,7 +51,7 @@
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" class="action-column">
         <button mat-icon-button (click)="openDialog(element)">
           <mat-icon>edit</mat-icon>
         </button>
@@ -68,10 +59,6 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-      mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      [class.outOfStock]="!row.inStock"
-    ></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.outOfStock]="!row.inStock"></tr>
   </table>
 </div>

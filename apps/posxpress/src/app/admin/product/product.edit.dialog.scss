@@ -1,0 +1,24 @@
+.ingredients-view {
+  margin-top: 2rem;
+  width: 100%;
+
+  .ingredients-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ingredients-list {
+    margin-top: 1rem;
+
+    .ingredient-input {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+
+      .price-input {
+        max-width: 5rem;
+      }
+    }
+  }
+}

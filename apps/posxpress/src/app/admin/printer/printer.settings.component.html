@@ -1,5 +1,5 @@
-<button mat-flat-button color="primary" (click)="addPrinter()">
-  Hinzufügen
+<button mat-fab color="primary" class="add-fab" (click)="addPrinter()">
+  <mat-icon>add</mat-icon>
 </button>
 <div class="printerContainer">
   <mat-card
@@ -8,21 +8,20 @@
     (click)="openDialog(printer)"
   >
     <mat-card-header>
-      <mat-card-title>{{ printer.name }}</mat-card-title>
+      <mat-card-title [matBadge]="printer.status?.status ? '0N' : ''" matBadgePosition="after" matBadgeColor="primary">{{ printer.name }}</mat-card-title>
       <mat-card-subtitle>{{ printer.address }}</mat-card-subtitle>
     </mat-card-header>
     <img
       mat-card-image
       src="https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/print/default/48px.svg"
-      height="200px"
+      height="150px"
     />
     <mat-card-content style="text-align: center">
-      {{ printer.status?.status || 'Unbekannt' }}
       {{ printer.model }}
       {{ printer.status?.msg }}
     </mat-card-content>
     <mat-card-footer>
-      <mat-chip-listbox>
+      <mat-chip-listbox class="tag-box">
         <mat-chip *ngFor="let tag of printer.tags" color="accent">{{
           tag
         }}</mat-chip>

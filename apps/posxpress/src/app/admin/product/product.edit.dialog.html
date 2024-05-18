@@ -13,30 +13,34 @@
     </mat-form-field>
     <px-form-tag-select [allTags]="(allTags$ | async) || []" [tags]="product.tags"></px-form-tag-select>
     <mat-checkbox matInput formControlName="inStock">Auf Lager</mat-checkbox>
-    <div formArrayName="ingredients">
-      <button mat-icon-button (click)="ingredientsExpanded = !ingredientsExpanded">
-        <mat-icon class="mat-icon-rtl-mirror">
-          {{ingredientsExpanded ? 'expand_more' : 'chevron_right'}}
-        </mat-icon>
-      </button>
-      <span>Zutaten</span>
-      <button mat-icon-button (click)="addNewIngredient()">
-        <mat-icon class="mat-icon-rtl-mirror">add</mat-icon>
-      </button>
+    <div formArrayName="ingredients" class="ingredients-view">
+      <div class="ingredients-actions">
+        <button mat-fab extended color="primary" (click)="addNewIngredient()">
+          <mat-icon class="mat-icon-rtl-mirror">add</mat-icon>
+          Zutaten
+        </button>
+        <button mat-icon-button (click)="ingredientsExpanded = !ingredientsExpanded">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ingredientsExpanded ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+      </div>
       <div *ngIf="ingredientsExpanded">
-        <div *ngFor="let ingredient of crudForm.controls.ingredients.controls; index as i" [formGroup]="ingredient">
+        <div class="ingredients-list" *ngFor="let ingredient of crudForm.controls.ingredients.controls; index as i" [formGroup]="ingredient">
           <mat-divider></mat-divider>
-          <mat-slide-toggle formControlName="contained"></mat-slide-toggle>
-          <mat-form-field>
-            <input matInput formControlName="name" placeholder="Zutat" />
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="number" formControlName="extraPrice" />
-            <span matSuffix style="margin-right: 10px">€</span>
-          </mat-form-field>
-          <button mat-icon-button (click)="removeIngredient(i)">
-            <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
-          </button>
+          <div class="ingredient-input">
+            <mat-slide-toggle formControlName="contained"></mat-slide-toggle>
+            <mat-form-field>
+              <input matInput formControlName="name" placeholder="Zutat" />
+            </mat-form-field>
+            <mat-form-field class="price-input">
+              <input matInput type="number" formControlName="extraPrice" />
+              <span matSuffix style="margin-right: 10px">€</span>
+            </mat-form-field>
+            <button mat-icon-button (click)="removeIngredient(i)">
+              <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -55,6 +55,7 @@ interface ProductControl {
 @Component({
   selector: 'px-product.settings.dialog',
   templateUrl: 'product.edit.dialog.html',
+  styleUrls: ['product.edit.dialog.scss'],
   standalone: true,
   imports: [
     FormTagSelectComponent,
