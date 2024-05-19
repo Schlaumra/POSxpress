@@ -9,6 +9,10 @@ import { Order, IPrinter, Settings } from '@px/interface';
 export class DataService {
   constructor(private httpClient: HttpClient) {}
 
+  testPrinter(ip: string): Observable<boolean> {
+    return this.httpClient.get<boolean>('/api/printers/test', { params: { ip } })
+  }
+
   getPrinters(): Observable<IPrinter[]> {
     return this.httpClient.get<IPrinter[]>('/api/printers');
   }

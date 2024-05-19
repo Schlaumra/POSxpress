@@ -22,7 +22,7 @@
     </mat-select>
   </mat-form-field>
 
-  <button crud-dialog-actions mat-button [disabled]="!printer.address" (click)="testPrinter()">
+  <button crud-dialog-actions mat-button [disabled]="!printer.address" (click)="testPrinter(printer.address)">
     Verbindung Testen
   </button>
 </px-crud-dialog>

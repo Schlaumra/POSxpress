@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PrintersService } from './printers.service';
 import { CreatePrinterDto } from './dto/create-printer.dto';
@@ -17,6 +18,17 @@ import { printerEntityName } from '@px/interface';
 @Controller(printerEntityName)
 export class PrintersController {
   constructor(private readonly printersService: PrintersService) {}
+
+  @Get('test')
+  async testPrinter(@Query('ip') ip: string): Promise<boolean> {
+    try {
+      const response = await fetch(`http://${ip}`) // TODO: This is dangerous and allows to make arbitrary requests
+      return response.ok
+    }
+    catch {
+      return false
+    }
+  }
 
   @Post()
   create(@Body() createPrinterDto: CreatePrinterDto) {

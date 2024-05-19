@@ -104,8 +104,12 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
     return this.crudForm.value
   }
 
-  testPrinter() {
-    this._snackBar.open('Verbindung erfolgreich TODO', '', { duration: 2000 });
-    this.printService.testConnection();
+  testPrinter(ip: string | undefined) {
+    if(ip) {
+      this.printService.testConnection(ip).subscribe(status => {
+        if(status) this._snackBar.open('Verbindung erfolgreich', '', { duration: 2000 });
+        else this._snackBar.open('Verbindung fehlgeschlagen', '', { duration: 2000 });
+      });
+    }
   }
 }
