@@ -8,6 +8,11 @@
   right: 0;
 }
 
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
 .is-mobile .toolbar {
   position: fixed;
   /* Make sure the toolbar will stay on top of the content as it scrolls past. */

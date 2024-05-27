@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { NonNullableFormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { OrderService, OrderState } from '../order.service';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { Order } from '@px/interface';
 import { DataService } from '../../data/data.service';
-import { AuthService } from '../../auth/auth.service';
+import { OrderService, OrderState } from '../order.service';
 
 const MIN = 1;
 
@@ -19,10 +18,8 @@ export class TableOrderComponent {
   constructor(
     private orderStore: OrderService,
     private data: DataService,
-    private authService: AuthService,
     private formBuilder: NonNullableFormBuilder
   ) {
-    this.orderStore.state = OrderState.table;
     this.data.getSettings().subscribe((value) => {
       this.tableNumber = value.tables;
       this.formControl.addValidators([
@@ -40,16 +37,16 @@ export class TableOrderComponent {
   }
 
   goToSelection() {
-    const value = this.formControl.value;
-    if (!!value && value >= MIN && value <= this.tableNumber) {
-      this.orderStore.order = {
-        table: value,
-        user: this.authService.getUser(),
-        productGroups: [],
-        payed: false,
-        printed: false,
-        payments: [],
-      };
+    const tableNumber = this.formControl.value;
+    if (!!tableNumber && tableNumber >= MIN && tableNumber <= this.tableNumber) {
+      if(this.orderStore.orderStore.currentOrder?.table !== undefined) {
+        const oldTable = this.orderStore.orderStore.currentOrder.table
+        const newOrder: Order = {...this.orderStore.orderStore.currentOrder, table: tableNumber}
+        this.orderStore.orderStore.updateCurrentOrder(newOrder, oldTable)
+      }
+      else {
+        this.orderStore.creatOrder(tableNumber)
+      }
       // TODO Check when order is already entered it deletes it
       this.orderStore.navigateToState(OrderState.select);
     }

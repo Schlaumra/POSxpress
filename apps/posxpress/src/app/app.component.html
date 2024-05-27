@@ -4,6 +4,11 @@
       <mat-icon>menu</mat-icon>
     </button>
     <h1 class="app-name">{{ title }}</h1>
+    <ng-container *ngIf="closeOrder$ | async as closeOrder">
+      <button mat-icon-button (click)="closeOrder()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </ng-container>
   </mat-toolbar>
 
   <mat-sidenav-container

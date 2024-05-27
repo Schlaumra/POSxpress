@@ -12,10 +12,14 @@ export class OrderComponent {
   constructor(public orderStore: OrderService) {}
 
   navigateBack() {
-    this.orderStore.navigateToState(this.orderStore.state - 1);
+    this.orderStore.moveBackward()
   }
 
   navigateforward() {
-    this.orderStore.navigateToState(this.orderStore.state + 1);
+    this.orderStore.moveForward()
+  }
+
+  startNewOrder() {
+    this.orderStore.navigateToState(OrderState.table)
   }
 }

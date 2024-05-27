@@ -1,0 +1,11 @@
+.order-list {
+    margin: 0 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    .left {
+        flex-grow: 1;
+    }
+}

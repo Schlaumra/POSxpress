@@ -10,6 +10,7 @@ import { SelectOrderComponent } from './order/select/select.order.component';
 import { PreviewOrderComponent } from './order/preview/preview.order.component';
 import { PaymentOrderComponent } from './order/payment/payment.order.component';
 import { authGuard } from './auth/auth.guard';
+import { HomeComponent } from './order/home'
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -19,11 +20,12 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard],
     data: { roles: ['admin', 'waiter'] },
     children: [
+      { path: 'home', component: HomeComponent },
       { path: 'table', component: TableOrderComponent },
       { path: 'select', component: SelectOrderComponent },
       { path: 'preview', component: PreviewOrderComponent },
       { path: 'payment', component: PaymentOrderComponent },
-      { path: '**', redirectTo: 'table' },
+      { path: '**', redirectTo: 'home' },
     ],
   },
   {
@@ -37,5 +39,5 @@ export const appRoutes: Route[] = [
       { path: 'product', component: ProductSettingsComponent },
     ],
   },
-  { path: '**', component: OrderComponent },
+  { path: '**', redirectTo: 'order' },
 ];

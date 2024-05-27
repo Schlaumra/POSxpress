@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgFor, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Order, ProductGroup } from '@px/interface';
-import { ProductSettingsService } from '../../admin/product/product.settings.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'px-select.order',
@@ -23,48 +23,48 @@ import { ProductSettingsService } from '../../admin/product/product.settings.ser
   styleUrls: ['./select.order.component.scss'],
 })
 export class SelectOrderComponent {
+  protected tagFilter = OrderService.tagFilter;
   tags: string[] = [];
-  order: Order;
+  order$: Observable<Order | undefined> = this.orderStore.currentOrder$;
 
   constructor(
     protected orderStore: OrderService,
-    private productSettingsService: ProductSettingsService,
 
     private data: DataService,
     public dialog: MatDialog
   ) {
-    if (this.orderStore.order) {
-      this.order = this.orderStore.order;
-    } else throw Error('Keine Order');
-
     this.data.getSettings().subscribe((value) => (this.tags = value.tags));
-    this.productSettingsService.index().subscribe((value) => {
-      // TODO: this should not be the settings service
-      if (this.order.productGroups.length === 0) {
-        value.forEach((product) =>
-          this.order.productGroups.push({
-            id: uuidv4(),
-            name: product.name,
-            info: product.info,
-            amount: 0,
-            product: product,
-          })
-        );
+  }
+
+  saveOrder(order: Order) {
+    this.orderStore.orderStore.updateCurrentOrder(order);
+  }
+
+  addProduct(productGroup: ProductGroup, order: Order) {
+    const index = order.productGroups.findIndex(
+      (pg) => pg.id === productGroup.id
+    );
+    if (index !== -1) {
+      order.productGroups[index].amount += 1;
+      this.saveOrder(order);
+    } else
+      console.warn('could not update productGroup; not found', productGroup);
+  }
+
+  removeProduct(productGroup: ProductGroup, order: Order) {
+    const index = order.productGroups.findIndex(
+      (pg) => pg.id === productGroup.id
+    );
+    if (index !== -1) {
+      if (order.productGroups[index].amount > 0) {
+        order.productGroups[index].amount -= 1;
+        this.saveOrder(order);
       }
-    });
+    } else
+      console.warn('could not update productGroup; not found', productGroup);
   }
 
-  addProduct(productGroup: ProductGroup) {
-    productGroup.amount += 1;
-  }
-
-  removeProduct(productGroup: ProductGroup) {
-    if (productGroup.amount > 0) {
-      productGroup.amount -= 1;
-    }
-  }
-
-  openProductOptions(productGroup: ProductGroup) {
+  openProductOptions(productGroup: ProductGroup, order: Order) {
     const dialogRef = this.dialog.open(ProductGroupDialogComponent, {
       data: { productGroup: productGroup },
     });
@@ -73,7 +73,7 @@ export class SelectOrderComponent {
       .afterClosed()
       .subscribe((result?: { action: string; productGroup: ProductGroup }) => {
         if (result?.action) {
-          const groupIndex = this.order.productGroups.indexOf(productGroup);
+          const groupIndex = order.productGroups.indexOf(productGroup);
           result.productGroup.info = result.productGroup.product.info;
 
           const customIngredients =
@@ -98,37 +98,25 @@ export class SelectOrderComponent {
             result.productGroup.info = result.productGroup.product.note;
           }
 
-          // const tmp1 = result.productGroup.amount
           switch (result.action) {
             case 'add':
-              // result.productGroup.amount = productGroup.amount
-              // if (JSON.stringify(result.productGroup) !== JSON.stringify(productGroup)) {
-              // result.productGroup.amount = tmp1
               result.productGroup.id = uuidv4();
               if (result.productGroup.amount === productGroup.amount) {
                 result.productGroup.amount = 1;
               }
               result.productGroup.custom = true;
-              this.order.productGroups.splice(
-                groupIndex + 1,
-                0,
-                result.productGroup
-              );
-              // }
-              // else {
-              // result.productGroup.amount = tmp1
-              // this.order.productGroups[groupIndex] = result.productGroup
-              // }
+              order.productGroups.splice(groupIndex + 1, 0, result.productGroup);
               break;
             case 'edit':
-              this.order.productGroups[groupIndex] = result.productGroup;
+              order.productGroups[groupIndex] = result.productGroup;
               break;
           }
+          this.saveOrder(order);
         }
       });
   }
 
-  orderFilter = (value: ProductGroup) => value.amount > 0;
+  orderFilter = OrderService.orderedFilter;
 }
 
 @Component({

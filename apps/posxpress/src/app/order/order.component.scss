@@ -16,9 +16,15 @@
     width: 100%;
     .bottom-nav {
       display: flex;
-      .info {
-        text-align: center;
+      .button-container {
         flex-grow: 1;
+        display: flex;
+        justify-content: center;
+      }
+      .info-container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
       }
     }
   }

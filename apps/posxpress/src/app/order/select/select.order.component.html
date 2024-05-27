@@ -1,58 +1,38 @@
 <div class="select-container">
   <div class="accordion">
     <mat-accordion>
-      <mat-expansion-panel
-        *ngFor="let tag of tags; index as i"
-        [expanded]="i === 0"
-      >
+      <mat-expansion-panel *ngFor="let tag of tags; index as i" [expanded]="i === 0">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{ tag }}
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div
-          *ngFor="
-            let productGroup of order.productGroups.filter(
-              orderStore.tagFilter(tag)
-            )
-          "
-          style="position: relative"
-        >
-          <mat-divider></mat-divider>
-          <div class="product-group" (click)="openProductOptions(productGroup)">
-            <button
-              mat-icon-button
-              (click)="removeProduct(productGroup); $event.stopPropagation()"
-              [hidden]="!productGroup.product.inStock"
-            >
-              <mat-icon>remove</mat-icon>
-            </button>
-            <div class="product-name">
-              <span
-                class="name"
-                [matBadge]="productGroup.amount"
-                [matBadgeHidden]="!productGroup.amount"
-                matBadgeOverlap="false"
-                >{{ productGroup.name }}
-                {{ productGroup.product.inStock ? '' : '- Ausverkauft' }}</span
-              >
-              <span class="info" [hidden]="!productGroup.info">{{
-                productGroup.info
-              }}</span>
+        <ng-container *ngIf="orderStore.currentOrder$ | async as currentOrder">
+          <ng-container *ngIf="currentOrder.productGroups.filter(this.tagFilter(tag)) as productGroups">
+            <div *ngFor="let productGroup of productGroups" style="position: relative">
+              <mat-divider></mat-divider>
+              <div class="product-group" (click)="openProductOptions(productGroup, currentOrder)">
+                <button mat-icon-button (click)="removeProduct(productGroup, currentOrder); $event.stopPropagation()"
+                  [hidden]="!productGroup.product.inStock">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <div class="product-name">
+                  <span class="name" [matBadge]="productGroup.amount" [matBadgeHidden]="!productGroup.amount"
+                    matBadgeOverlap="false">{{ productGroup.name }}
+                    {{ productGroup.product.inStock ? '' : '- Ausverkauft' }}</span>
+                  <span class="info" [hidden]="!productGroup.info">{{
+                    productGroup.info
+                    }}</span>
+                </div>
+                <button mat-icon-button (click)="addProduct(productGroup, currentOrder); $event.stopPropagation()"
+                  [hidden]="!productGroup.product.inStock">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <div class="out-of-stock-overlay" [hidden]="productGroup.product.inStock"></div>
             </div>
-            <button
-              mat-icon-button
-              (click)="addProduct(productGroup); $event.stopPropagation()"
-              [hidden]="!productGroup.product.inStock"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
-          <div
-            class="out-of-stock-overlay"
-            [hidden]="productGroup.product.inStock"
-          ></div>
-        </div>
+          </ng-container>
+        </ng-container>
       </mat-expansion-panel>
     </mat-accordion>
   </div>

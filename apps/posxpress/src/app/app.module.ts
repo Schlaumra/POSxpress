@@ -35,6 +35,8 @@ import { AuthService } from './auth/auth.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { PrintService } from './print/print.service';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { HomeComponent } from './order/home';
+import { OrderStoreService } from './order.store.service';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -60,8 +62,6 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        // allowedDomains: ["example.com"],
-        // disallowedRoutes: ["http://example.com/examplebadroute/"],
       },
     }),
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -69,6 +69,7 @@ export function tokenGetter() {
     MatIconModule,
     MatButtonModule,
     BrowserAnimationsModule,
+    HomeComponent,
     ReactiveFormsModule,
     MatToolbarModule,
     MatBadgeModule,
@@ -86,6 +87,7 @@ export function tokenGetter() {
   providers: [
     AuthService,
     PrintService,
+    OrderStoreService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
