@@ -1,11 +1,40 @@
-.order-list {
-    margin: 0 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    flex-direction: column;
+.home-container {
+    padding: 1.2rem;
 
-    .left {
-        flex-grow: 1;
+    .account-info {
+        display: flex;
+        align-items: center;
+    
+        .name {
+            display: flex;
+            flex-grow: 1;
+            gap: 1rem;
+
+            .title {
+                font-weight: 500;
+                font-size: 1.5em;
+            }
+        }
+    }
+
+    .order-container {
+        margin-top: 1rem;
+
+        .order-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            flex-direction: column;
+
+            .printed-info {
+                display: flex;
+                align-items: end;
+                gap: 0.3rem;
+            }
+        
+            .left {
+                flex-grow: 1;
+            }
+        }
     }
 }
