@@ -16,7 +16,7 @@ import { User, UserSchema } from '../users/schemas/user.shema';
     JwtModule.register({
       global: true,
       secret: process.env['JWT_TOKEN'],
-      signOptions: { expiresIn: '10m' },
+      signOptions: { expiresIn: '24h' },
     }),
   ],
   controllers: [AuthController],

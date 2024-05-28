@@ -37,6 +37,7 @@ import { PrintService } from './print/print.service';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { HomeComponent } from './order/home';
 import { OrderStoreService } from './order.store.service';
+import { LogoutComponent } from './logout/logout.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -78,6 +79,7 @@ export function tokenGetter() {
     MatSnackBarModule,
     MatListModule,
     MatExpansionModule,
+    LogoutComponent,
     MatDialogModule,
     MatSelectModule,
     MatChipsModule,

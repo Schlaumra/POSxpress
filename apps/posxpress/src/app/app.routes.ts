@@ -11,6 +11,7 @@ import { PreviewOrderComponent } from './order/preview/preview.order.component';
 import { PaymentOrderComponent } from './order/payment/payment.order.component';
 import { authGuard } from './auth/auth.guard';
 import { HomeComponent } from './order/home'
+import { LogoutComponent } from './logout/logout.component';
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginComponent },
@@ -38,6 +39,10 @@ export const appRoutes: Route[] = [
       { path: 'printer', component: PrinterSettingsComponent },
       { path: 'product', component: ProductSettingsComponent },
     ],
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent
   },
   { path: '**', redirectTo: 'order' },
 ];

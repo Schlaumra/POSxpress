@@ -28,7 +28,6 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('access_token');
-    window.location.reload();
   }
 
   public isLoggedIn() {

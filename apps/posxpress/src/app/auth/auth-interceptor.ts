@@ -24,6 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401 || err.status === 403) {
             this.authService.logout();
+            window.location.reload();
           }
         }
         throw new Error(err);
