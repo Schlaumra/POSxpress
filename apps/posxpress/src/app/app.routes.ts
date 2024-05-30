@@ -4,6 +4,7 @@ import { AdminComponent } from './admin/admin.component';
 import { UserSettingsComponent } from './admin/user/user.settings.component';
 import { PrinterSettingsComponent } from './admin/printer/printer.settings.component';
 import { ProductSettingsComponent } from './admin/product/product.settings.component';
+import { DashboardSettingsComponent } from './admin/dashboard';
 import { OrderComponent } from './order/order.component';
 import { TableOrderComponent } from './order/table/table.order.component';
 import { SelectOrderComponent } from './order/select/select.order.component';
@@ -38,6 +39,7 @@ export const appRoutes: Route[] = [
       { path: 'user', component: UserSettingsComponent },
       { path: 'printer', component: PrinterSettingsComponent },
       { path: 'product', component: ProductSettingsComponent },
+      { path: '**', component: DashboardSettingsComponent },
     ],
   },
   {

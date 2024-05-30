@@ -23,4 +23,8 @@ export class DataService {
   getSettings(): Observable<Settings> {
     return this.httpClient.get<Settings>('/api/settings');
   }
+
+  updateSettings(settings: Partial<Settings>) {
+    return this.httpClient.patch<void>('/api/settings', settings)
+  }
 }

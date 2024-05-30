@@ -1,0 +1,13 @@
+<ng-container *ngIf="settings$ | async as settings">
+    <form [formGroup]="tableForm">
+    <div class="table-number-form">
+            <mat-form-field>
+                <mat-label>Anzahl Tische</mat-label>
+                <input matInput formControlName="table" type="number">
+            </mat-form-field>
+        </div>
+        <div class="tag-form">
+          <px-form-tag-select [allTags]="settings.tags" [tags]="tableForm.value.tags" (changeEvent)="tagsChangesSubject.next($event)"></px-form-tag-select>
+        </div>
+    </form>
+</ng-container>

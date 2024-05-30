@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AsyncPipe, NgFor } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
@@ -33,6 +33,9 @@ export class FormTagSelectComponent {
   @Input({required: true})
   public allTags: string[] = []
 
+  @Output()
+  public changeEvent = new EventEmitter<string[]>();
+
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
   tagCtrl = new FormControl('');
@@ -56,6 +59,7 @@ export class FormTagSelectComponent {
     event.chipInput?.clear();
 
     this.tagCtrl.setValue(null);
+    this.changeEvent.emit(this.tags)
   }
 
   remove(tag: string): void {
@@ -63,6 +67,7 @@ export class FormTagSelectComponent {
 
     if (index !== undefined && index >= 0) {
       this.tags?.splice(index, 1);
+      this.changeEvent.emit(this.tags)
     }
   }
 
@@ -70,6 +75,7 @@ export class FormTagSelectComponent {
     this.tags?.push(event.option.viewValue);
     this.tagsInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
+    this.changeEvent.emit(this.tags)
   }
   
   private _filter(value: string): string[] {
