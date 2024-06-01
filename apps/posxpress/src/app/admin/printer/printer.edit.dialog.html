@@ -10,7 +10,7 @@
     <mat-label>IP-Addresse</mat-label>
     <input matInput formControlName="address" required />
   </mat-form-field>
-  <px-form-tag-select [allTags]="(allTags$ | async) || []" [tags]="printer.tags"></px-form-tag-select>
+  <px-form-tag-select [allTagsService]="dataService" [tags]="printer.tags"></px-form-tag-select>
   <mat-form-field>
     <mat-label>Modell</mat-label>
     <mat-select formControlName="model">

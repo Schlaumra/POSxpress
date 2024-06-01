@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Order, IPrinter, Settings } from '@px/interface';
 
@@ -26,5 +26,12 @@ export class DataService {
 
   updateSettings(settings: Partial<Settings>) {
     return this.httpClient.patch<void>('/api/settings', settings)
+  }
+
+  public getAllTags(): Observable<string[]> {
+    return this.getSettings().pipe(map(settings => settings.tags))
+  }
+  public saveAllTags(tags: string[]): Observable<unknown> {
+    return this.updateSettings({tags})
   }
 }

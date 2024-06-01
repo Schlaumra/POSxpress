@@ -11,7 +11,7 @@
       <input matInput type="number" formControlName="price" />
       <span matSuffix style="margin-right: 10px">€</span>
     </mat-form-field>
-    <px-form-tag-select [allTags]="(allTags$ | async) || []" [tags]="product.tags"></px-form-tag-select>
+    <px-form-tag-select [allTagsService]="dataService" [tags]="product.tags"></px-form-tag-select>
     <mat-checkbox matInput formControlName="inStock">Auf Lager</mat-checkbox>
     <div formArrayName="ingredients" class="ingredients-view">
       <div class="ingredients-actions">

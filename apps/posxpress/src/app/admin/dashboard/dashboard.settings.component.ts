@@ -44,30 +44,23 @@ export class DashboardSettingsComponent extends AdminSettings {
   });
   settingsSubject = new BehaviorSubject<Settings | null>(null);
   settings$: Observable<Settings | null> = this.settingsSubject.asObservable();
-  tagsChangesSubject = new BehaviorSubject<string[] | undefined>(undefined);
   changes$: Observable<Partial<Settings>>;
 
   constructor(
     private readonly formBuilder: NonNullableFormBuilder,
-    private data: DataService
+    protected dataService: DataService
   ) {
     super();
-    this.data.getSettings().subscribe((settings) => {
+    this.dataService.getSettings().subscribe((settings) => {
       this.settingsSubject.next(settings);
       this.tableForm.controls.table.setValue(settings.tables);
       this.tableForm.controls.tags.setValue(settings.tags);
     });
-    this.changes$ = merge(
-      this.tableForm.controls.table.valueChanges.pipe(
+    this.changes$ = this.tableForm.controls.table.valueChanges.pipe(
         skip(1),
         map((val) => ({ tables: val }))
-      ),
-      this.tagsChangesSubject.pipe(
-        filter((val) => !!val),
-        map((val) => ({ tags: val }))
-      )
     );
 
-    this.changes$.pipe(switchMap(value => this.data.updateSettings(value))).subscribe();
+    this.changes$.pipe(switchMap(value => this.dataService.updateSettings(value))).subscribe();
   }
 }

@@ -80,7 +80,7 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
     protected context: IPrinterOpenContext,
     private formBuilder: NonNullableFormBuilder,
     private _snackBar: MatSnackBar,
-    private dataService: DataService,
+    protected dataService: DataService,
     private printService: PrintService
   ) {
     super();

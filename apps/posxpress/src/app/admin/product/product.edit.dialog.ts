@@ -100,7 +100,7 @@ export class ProductSettingsDialogComponent extends AbstractCrudDialogComponent<
     protected dialogRef: MatDialogRef<ProductSettingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) protected context: IProductOpenContext,
     private formBuilder: NonNullableFormBuilder,
-    private dataService: DataService
+    protected dataService: DataService
   ) {
     super();
     const { data, edit } = context;

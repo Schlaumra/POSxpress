@@ -1,19 +1,43 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AsyncPipe, NgFor } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, map, startWith } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  ReplaySubject,
+  Subject,
+  map,
+  shareReplay,
+  startWith,
+  switchMap
+} from 'rxjs';
+
+interface AllTagsService {
+  getAllTags: () => Observable<string[]>;
+  saveAllTags: (allTags: string[]) => Observable<unknown>;
+}
 
 @Component({
   selector: 'px-form-tag-select',
   templateUrl: 'form-tag-select.component.html',
-  styleUrls: [
-    'form-tag-select.component.scss'
-  ],
+  styleUrls: ['form-tag-select.component.scss'],
   standalone: true,
   imports: [
     MatInputModule,
@@ -25,41 +49,98 @@ import { Observable, map, startWith } from 'rxjs';
     MatAutocompleteModule,
   ],
 })
-export class FormTagSelectComponent {
+export class FormTagSelectComponent implements OnInit, OnDestroy {
+  @Input({ required: true })
+  public tags!: string[] | undefined;
 
-  @Input({required: true})
-  public tags!: string[] | undefined
+  @Input({ required: true })
+  public allTagsService!: AllTagsService;
 
-  @Input({required: true})
-  public allTags: string[] = []
+  @Input()
+  public removeTags = false;
 
   @Output()
   public changeEvent = new EventEmitter<string[]>();
 
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
+  allTagsSubject = new ReplaySubject<Observable<string[]>>();
+  allTags$: Observable<string[]> = this.allTagsSubject.pipe(
+    switchMap((o) => o),
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
   tagCtrl = new FormControl('');
-  filteredTags: Observable<string[]>;
+  filteredTagsSubject = new ReplaySubject<Observable<string[]>>();
+  filteredTags$: Observable<string[]> = this.filteredTagsSubject.pipe(
+    switchMap((o) => o),
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  
-  constructor() {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) =>
-        tag ? this._filter(tag) : this.allTags.slice()
+  addedEntrySubject = new Subject<string>()
+  removedEntrySubject = new Subject<string>()
+
+  ngOnDestroy(): void {
+    this.allTagsSubject.complete();
+    this.filteredTagsSubject.complete();
+    this.removedEntrySubject.complete();
+    this.addedEntrySubject.complete();
+  }
+  ngOnInit(): void {
+    const allTags$ = this.allTagsService
+      .getAllTags()
+      .pipe(shareReplay({ refCount: true, bufferSize: 1 }));
+    this.allTagsSubject.next(allTags$);
+
+    this.filteredTagsSubject.next(
+      allTags$.pipe(
+        switchMap((allTags) =>
+          this.tagCtrl.valueChanges.pipe(
+            startWith(null),
+            map((tag: string | null) =>
+              tag ? this._filter(tag, allTags) : allTags.slice()
+            )
+          )
+        )
       )
     );
+
+    allTags$.pipe(switchMap(allTags => this.addedEntrySubject.pipe(
+      switchMap(addedTag => {
+        const tagsSet = new Set(allTags)
+        tagsSet.add(addedTag)
+        if(tagsSet.size != allTags.length) {
+          return this.allTagsService.saveAllTags([...tagsSet])
+        }
+        return EMPTY
+      })
+    ))).subscribe()
+
+    if(this.removeTags) {
+      allTags$.pipe(switchMap(allTags => this.removedEntrySubject.pipe(
+        switchMap(removedTag => {
+          const tagsSet = new Set(allTags)
+          tagsSet.delete(removedTag)
+          if(tagsSet.size != allTags.length) {
+            return this.allTagsService.saveAllTags([...tagsSet])
+          }
+          return EMPTY
+        })
+      ))).subscribe()
+    }
   }
 
   add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    const tag = (event.value || '').trim();
 
-    this.tags?.push(value);
+    if(!this.tags?.find(t => t === tag)) {
+      this.tags?.push(tag);
+      
+      this.changeEvent.emit(this.tags);
+      this.addedEntrySubject.next(tag)
+    }
     event.chipInput?.clear();
-
     this.tagCtrl.setValue(null);
-    this.changeEvent.emit(this.tags)
   }
 
   remove(tag: string): void {
@@ -67,22 +148,21 @@ export class FormTagSelectComponent {
 
     if (index !== undefined && index >= 0) {
       this.tags?.splice(index, 1);
-      this.changeEvent.emit(this.tags)
-    }
+      this.changeEvent.emit(this.tags);
+      this.removedEntrySubject.next(tag)
+  }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.tags?.push(event.option.viewValue);
+    this.changeEvent.emit(this.tags);
     this.tagsInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
-    this.changeEvent.emit(this.tags)
   }
-  
-  private _filter(value: string): string[] {
+
+  private _filter(value: string, tags: string[]): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allTags.filter((tag) =>
-      tag.toLowerCase().includes(filterValue)
-    );
+    return tags.filter((tag) => tag.toLowerCase().includes(filterValue));
   }
 }

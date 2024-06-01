@@ -7,7 +7,7 @@
             </mat-form-field>
         </div>
         <div class="tag-form">
-          <px-form-tag-select [allTags]="settings.tags" [tags]="tableForm.value.tags" (changeEvent)="tagsChangesSubject.next($event)"></px-form-tag-select>
+          <px-form-tag-select [allTagsService]="dataService" [removeTags]="true" [tags]="tableForm.value.tags"></px-form-tag-select>
         </div>
     </form>
 </ng-container>
