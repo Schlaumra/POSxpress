@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ productGroup.name }} Optionen</h2>
+<h2 mat-dialog-title>{{ productGroup.name }} Optionen | {{ productGroup.product.price | currency: 'EUR' }}</h2>
 <span mat-dialog-content mat-caption *ngIf="productGroup.product.info">{{ productGroup.product.info }}</span>
 <mat-dialog-content>
   <div class="input">

@@ -59,7 +59,7 @@
           "browserTarget": "posxpress:build:production"
         },
         "development": {
-          "host": "localhost",
+          "host": "0.0.0.0",
           "proxyConfig": "apps/posxpress/proxy.conf.json",
           "browserTarget": "posxpress:build:development"
         }

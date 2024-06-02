@@ -14,6 +14,8 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 1000;
+    
     .bottom-nav {
       display: flex;
       .button-container {

@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Order, ProductGroup } from '@px/interface';
 import { Observable } from 'rxjs';
@@ -135,6 +135,7 @@ export class SelectOrderComponent {
     MatCheckboxModule,
     NgFor,
     ReactiveFormsModule,
+    CurrencyPipe
   ],
 })
 export class ProductGroupDialogComponent {
