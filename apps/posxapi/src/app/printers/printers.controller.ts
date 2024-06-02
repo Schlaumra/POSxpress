@@ -36,9 +36,9 @@ export class PrintersController {
   }
 
   @Roles(['waiter'])
-  @Post('print/:id')
-  print(@Param('id') id: string, @Body() order: Order) {
-    return this.printersService.print(id, order);
+  @Post('print')
+  print(@Body() order: Order) {
+    return this.printersService.print(order);
   }
 
   @Roles(['waiter'])

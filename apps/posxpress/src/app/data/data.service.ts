@@ -16,8 +16,8 @@ export class DataService {
   getPrinters(): Observable<IPrinter[]> {
     return this.httpClient.get<IPrinter[]>('/api/printers');
   }
-  print(printer: IPrinter, order: Order) {
-    return this.httpClient.post(`api/printers/print/${printer._id}`, order);
+  print(order: Order) {
+    return this.httpClient.post(`api/printers/print`, order);
   }
 
   getSettings(): Observable<Settings> {

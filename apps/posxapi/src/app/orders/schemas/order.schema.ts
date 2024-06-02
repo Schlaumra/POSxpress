@@ -41,6 +41,8 @@ export class Order {
   @Prop()
   printQueue?: [];
   @Prop()
+  failureCount?: number;
+  @Prop()
   printed: boolean;
   @Prop()
   payments: Payment[];

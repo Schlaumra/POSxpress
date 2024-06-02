@@ -10,9 +10,12 @@ export class PrintService {
   constructor(private dataService: DataService) {}
 
   print(order: Order) {
-    this.dataService.getPrinters().subscribe((printers) => {
-      this.dataService.print(printers[0], order).subscribe();
-    });
+    const filteredProductGroup = order.productGroups.filter(pg => pg.amount > 0)
+    const newOrder: Order = {
+      ...order,
+      productGroups: filteredProductGroup
+    }
+    this.dataService.print(newOrder).subscribe();
   }
 
   testConnection(ip: string): Observable<boolean> {
