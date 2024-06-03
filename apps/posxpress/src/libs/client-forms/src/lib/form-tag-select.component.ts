@@ -19,6 +19,7 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
+  BehaviorSubject,
   EMPTY,
   Observable,
   ReplaySubject,
@@ -26,12 +27,14 @@ import {
   map,
   shareReplay,
   startWith,
-  switchMap
+  switchMap,
+  tap,
 } from 'rxjs';
 
 interface AllTagsService {
   getAllTags: () => Observable<string[]>;
-  saveAllTags: (allTags: string[]) => Observable<unknown>;
+  addTag: (tag: string) => Observable<unknown>;
+  removeTag: (tag: string) => Observable<unknown>;
 }
 
 @Component({
@@ -63,7 +66,7 @@ export class FormTagSelectComponent implements OnInit, OnDestroy {
   public changeEvent = new EventEmitter<string[]>();
 
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
-
+  triggerUpdateSubject = new BehaviorSubject<void>(undefined);
   allTagsSubject = new ReplaySubject<Observable<string[]>>();
   allTags$: Observable<string[]> = this.allTagsSubject.pipe(
     switchMap((o) => o),
@@ -77,8 +80,8 @@ export class FormTagSelectComponent implements OnInit, OnDestroy {
   );
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  addedEntrySubject = new Subject<string>()
-  removedEntrySubject = new Subject<string>()
+  addedEntrySubject = new Subject<string>();
+  removedEntrySubject = new Subject<string>();
 
   ngOnDestroy(): void {
     this.allTagsSubject.complete();
@@ -87,9 +90,14 @@ export class FormTagSelectComponent implements OnInit, OnDestroy {
     this.addedEntrySubject.complete();
   }
   ngOnInit(): void {
-    const allTags$ = this.allTagsService
-      .getAllTags()
-      .pipe(shareReplay({ refCount: true, bufferSize: 1 }));
+    const allTags$ = this.triggerUpdateSubject.pipe(
+      switchMap(() =>
+        this.allTagsService
+          .getAllTags()
+          .pipe(shareReplay({ refCount: true, bufferSize: 1 }))
+      )
+    );
+
     this.allTagsSubject.next(allTags$);
 
     this.filteredTagsSubject.next(
@@ -105,42 +113,60 @@ export class FormTagSelectComponent implements OnInit, OnDestroy {
       )
     );
 
-    allTags$.pipe(switchMap(allTags => this.addedEntrySubject.pipe(
-      switchMap(addedTag => {
-        const tagsSet = new Set(allTags)
-        tagsSet.add(addedTag)
-        if(tagsSet.size != allTags.length) {
-          return this.allTagsService.saveAllTags([...tagsSet])
-        }
-        return EMPTY
-      })
-    ))).subscribe()
+    allTags$
+      .pipe(
+        switchMap((allTags) =>
+          this.addedEntrySubject.pipe(
+            switchMap((addedTag) => {
+              const tagsSet = new Set(allTags);
+              tagsSet.add(addedTag);
+              if (tagsSet.size != allTags.length) {
+                return this.allTagsService
+                  .addTag(addedTag)
+                  .pipe(tap(() => this.triggerUpdateSubject.next()));
+              }
+              return EMPTY;
+            })
+          )
+        )
+      )
+      .subscribe();
 
-    if(this.removeTags) {
-      allTags$.pipe(switchMap(allTags => this.removedEntrySubject.pipe(
-        switchMap(removedTag => {
-          const tagsSet = new Set(allTags)
-          tagsSet.delete(removedTag)
-          if(tagsSet.size != allTags.length) {
-            return this.allTagsService.saveAllTags([...tagsSet])
-          }
-          return EMPTY
-        })
-      ))).subscribe()
+    if (this.removeTags) {
+      allTags$
+        .pipe(
+          switchMap((allTags) =>
+            this.removedEntrySubject.pipe(
+              switchMap((removedTag) => {
+                const tagsSet = new Set(allTags);
+                tagsSet.delete(removedTag);
+                if (tagsSet.size != allTags.length) {
+                  return this.allTagsService
+                    .removeTag(removedTag)
+                    .pipe(tap(() => this.triggerUpdateSubject.next()));
+                }
+                return EMPTY;
+              })
+            )
+          )
+        )
+        .subscribe();
     }
   }
 
   add(event: MatChipInputEvent): void {
     const tag = (event.value || '').trim();
 
-    if(!this.tags?.find(t => t === tag)) {
-      this.tags?.push(tag);
-      
-      this.changeEvent.emit(this.tags);
-      this.addedEntrySubject.next(tag)
+    if (tag != '') {
+      if (!this.tags?.find((t) => t === tag)) {
+        this.tags?.push(tag);
+
+        this.changeEvent.emit(this.tags);
+        this.addedEntrySubject.next(tag);
+      }
+      event.chipInput?.clear();
+      this.tagCtrl.setValue(null);
     }
-    event.chipInput?.clear();
-    this.tagCtrl.setValue(null);
   }
 
   remove(tag: string): void {
@@ -149,8 +175,8 @@ export class FormTagSelectComponent implements OnInit, OnDestroy {
     if (index !== undefined && index >= 0) {
       this.tags?.splice(index, 1);
       this.changeEvent.emit(this.tags);
-      this.removedEntrySubject.next(tag)
-  }
+      this.removedEntrySubject.next(tag);
+    }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {

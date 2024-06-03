@@ -31,7 +31,11 @@ export class DataService {
   public getAllTags(): Observable<string[]> {
     return this.getSettings().pipe(map(settings => settings.tags))
   }
-  public saveAllTags(tags: string[]): Observable<unknown> {
-    return this.updateSettings({tags})
+  public addTag(tag: string): Observable<unknown> {
+    return this.httpClient.post<void>('/api/settings/tag', {tag})
+  }
+
+  public removeTag(tag: string): Observable<unknown> {
+    return this.httpClient.delete<void>('/api/settings/tag',{body: {tag}})
   }
 }

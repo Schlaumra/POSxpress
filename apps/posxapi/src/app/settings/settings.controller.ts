@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Post, Delete } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -11,6 +11,16 @@ export class SettingsController {
   @Get()
   findAll() {
     return this.settingsService.get();
+  }
+
+  @Delete('tag')
+  removeTag(@Body() tagDto: {tag: string}) {
+    return this.settingsService.deleteTag(tagDto.tag)
+  }
+
+  @Post('tag')
+  addTag(@Body() tagDto: {tag: string}) {
+    return this.settingsService.addTag(tagDto.tag)
   }
 
   @Patch()

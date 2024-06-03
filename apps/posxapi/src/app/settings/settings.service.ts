@@ -14,6 +14,24 @@ export class SettingsService {
     return this.settingsModel.findOne({ version: 1 });
   }
 
+  deleteTag(tag: string) {
+    return this.settingsModel.findOneAndUpdate(
+      { version: 1 },
+      {
+        $pull: { tags: tag },
+      }
+    );
+  }
+
+  addTag(tag: string) {
+    return this.settingsModel.findOneAndUpdate(
+      { version: 1 },
+      {
+        $addToSet: { tags: tag },
+      }
+    );
+  }
+
   update(updateSettingDto: UpdateSettingDto) {
     return this.settingsModel.findOneAndUpdate(
       { version: 1 },

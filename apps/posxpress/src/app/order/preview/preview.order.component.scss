@@ -5,6 +5,7 @@
 
   .accordion {
     flex-grow: 1;
+    margin-bottom: 90px;
     .out-of-stock-overlay {
       position: absolute;
       left: 0;
@@ -39,9 +40,10 @@
   }
 
   .print-button {
+    position: fixed;
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-bottom: 20px;
+    bottom: 80px;
   }
 }
