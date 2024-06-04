@@ -8,7 +8,17 @@ import { Model } from 'mongoose';
 export class SettingsService {
   constructor(
     @InjectModel(Settings.name) private settingsModel: Model<Settings>
-  ) {}
+  ) {
+    this.settingsModel.count().exec().then(val => {
+      if(val == 0) {
+        this.settingsModel.create({
+          tables: 10,
+          tags: [],
+          version: 1
+        })
+      }
+    })
+  }
 
   get() {
     return this.settingsModel.findOne({ version: 1 });

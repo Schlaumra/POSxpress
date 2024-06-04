@@ -10,6 +10,7 @@ import {
   EMPTY,
   Observable,
   Subscription,
+  catchError,
   firstValueFrom,
   from,
   interval,
@@ -45,22 +46,33 @@ export class PrintSchedulerService {
       if (order) {
         return this.print(order, printer, async () => {
           await firstValueFrom(this.trigger$);
-          if(!order.failureCount) order.failureCount = 0
-          order.failureCount += 1
-          if(order.failureCount < 200) {
-              queue.orders.push(order)
+          if (!order.failureCount) order.failureCount = 0;
+          order.failureCount += 1;
+          if (order.failureCount < 200) {
+            queue.orders.push(order);
+          } else {
+            console.warn('Discarding order', order);
           }
-          else {
-            console.warn('Discarding order', order)
-          }
-        }).pipe(switchMap(() => printOneByOne(queue)));
+        }).pipe(
+          switchMap(() => printOneByOne(queue)),
+          catchError((err) => {
+            console.error('During printing an error happened: ', err);
+            return EMPTY;
+          })
+        );
       }
       return EMPTY;
     };
     const value: PrintQueue = {
       orders: [],
       subscription: this.trigger$
-        .pipe(switchMap(() => printOneByOne(value)))
+        .pipe(
+          switchMap(() => printOneByOne(value)),
+          catchError((err) => {
+            console.error('During printing an error happened: ', err);
+            return EMPTY;
+          })
+        )
         .subscribe(),
     };
     return value;

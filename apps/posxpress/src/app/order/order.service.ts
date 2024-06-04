@@ -152,7 +152,6 @@ export class OrderService {
   }
 
   navigateToState(state: OrderState) {
-    console.log('navigate to ', state)
     switch (state) {
       case OrderState.home:
         this.stateSubject.next(OrderState.home);

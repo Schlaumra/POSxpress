@@ -94,8 +94,6 @@ export class ProductSettingsDialogComponent extends AbstractCrudDialogComponent<
     // note: this.formBuilder.control<string | undefined>(''),
   });
 
-  protected allTags$: Observable<string[]>;
-
   constructor(
     protected dialogRef: MatDialogRef<ProductSettingsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) protected context: IProductOpenContext,
@@ -103,8 +101,8 @@ export class ProductSettingsDialogComponent extends AbstractCrudDialogComponent<
     protected dataService: DataService
   ) {
     super();
-    const { data, edit } = context;
-    if (edit) {
+    const data: IProduct = JSON.parse(JSON.stringify(context.data))
+    if (context.edit) {
       this.crudForm.patchValue(data);
       if (data.ingredients && data.ingredients.length > 0) {
         this.ingredientsExpanded = true;
@@ -115,9 +113,6 @@ export class ProductSettingsDialogComponent extends AbstractCrudDialogComponent<
         );
       }
     }
-    this.allTags$ = this.dataService
-      .getSettings()
-      .pipe(map((settings) => settings.tags));
   }
 
   public get product() {

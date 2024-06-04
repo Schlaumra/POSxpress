@@ -84,8 +84,8 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
     private printService: PrintService
   ) {
     super();
-    const {data, edit} = context
-    if(edit) {
+    const data: IPrinter = JSON.parse(JSON.stringify(context.data))
+    if(context.edit) {
       this.crudForm.setValue({
         name: data.name,
         address: data.address,
