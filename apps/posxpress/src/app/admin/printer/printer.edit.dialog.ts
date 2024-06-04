@@ -65,7 +65,6 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
   IPrinterOpenContext,
   printerControl
 > {
-  protected allTags$: Observable<string[]>
   modelGroups = MODELS;
 
   protected crudForm: FormGroup<printerControl> = this.formBuilder.group({
@@ -93,11 +92,6 @@ export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
         tags: data.tags,
       });
     }
-
-    this.allTags$ = this.dataService
-    .getSettings().pipe(
-      map(settings => settings.tags)
-    )
   }
 
   public get printer() {
