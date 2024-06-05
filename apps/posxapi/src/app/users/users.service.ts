@@ -8,7 +8,18 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {
+    this.userModel.count().exec().then(val => {
+      if(val == 0) {
+        this.create({
+          name: 'admin',
+          password: 'admin',
+          roles: ['admin', 'waiter'],
+          tags: []
+        })
+      }
+    })
+  }
 
   create(createUserDto: CreateUserDto) {
     const user: User = {

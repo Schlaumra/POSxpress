@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const basePath = '/api/';
+const basePath = '/api';
 
 export abstract class AbstractCrudService<
   TEntity,
