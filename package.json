@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "generate-docker": "bash generate-docker.sh",
     "format-check": "prettier --check .",
     "format-fix": "prettier --write ."
   },
