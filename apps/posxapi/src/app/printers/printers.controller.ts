@@ -22,8 +22,7 @@ export class PrintersController {
   @Get('test')
   async testPrinter(@Query('ip') ip: string): Promise<boolean> {
     try {
-      const response = await fetch(`http://${ip}`) // TODO: This is dangerous and allows to make arbitrary requests
-      return response.ok
+      return true
     }
     catch {
       return false

@@ -2,17 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
-  CharacterSet,
-  PrinterTypes,
-  ThermalPrinter,
-} from 'node-thermal-printer';
-import {
   EMPTY,
   Observable,
   Subscription,
   catchError,
   firstValueFrom,
-  from,
   interval,
   switchMap,
 } from 'rxjs';
@@ -137,67 +131,70 @@ export class PrintSchedulerService {
     const printer = (await this.printerModel.findOne()).toObject();
 
     if(printer) {
-      console.log('Printing', bill);
-      try {
-        const networkPrinter = new ThermalPrinter({
-          type: PrinterTypes.EPSON,
-          interface: `tcp://${printer.address}:9100`,
-          characterSet: CharacterSet.ISO8859_2_LATIN2,
-        });
+      // console.log('Printing', bill);
+      // try {
+        // const networkPrinter = new ThermalPrinter({
+        //   type: PrinterTypes.EPSON,
+        //   interface: `tcp://${printer.address}:9100`,
+        //   characterSet: CharacterSet.ISO8859_2_LATIN2,
+        // });
+
+        return EMPTY
   
-        return from(networkPrinter.isPrinterConnected()).pipe(
-          switchMap((connected: boolean) => {
-            if (connected) {
-              networkPrinter.alignCenter();
-              networkPrinter.println(`${formatDate(bill.start)} - ${formatDate(bill.end)}`);
-              networkPrinter.bold(true);
-              networkPrinter.println('');
-              networkPrinter.println('POSXPRESS');
-              networkPrinter.println('Abrechnung');
-              networkPrinter.println('');
-              networkPrinter.bold(false);
-              networkPrinter.alignLeft();
-              networkPrinter.drawLine();
-              networkPrinter.println('');
+      //   return from(networkPrinter.isPrinterConnected()).pipe(
+      //     switchMap((connected: boolean) => {
+      //       if (connected) {
+      //         networkPrinter.alignCenter();
+      //         networkPrinter.println(`${formatDate(bill.start)} - ${formatDate(bill.end)}`);
+      //         networkPrinter.bold(true);
+      //         networkPrinter.println('');
+      //         networkPrinter.println('POSXPRESS');
+      //         networkPrinter.println('Abrechnung');
+      //         networkPrinter.println('');
+      //         networkPrinter.bold(false);
+      //         networkPrinter.alignLeft();
+      //         networkPrinter.drawLine();
+      //         networkPrinter.println('');
   
-              Object.entries(bill.billGroup).forEach(([category, billProducts]) => {
-                networkPrinter.println(category);
-                billProducts.products.forEach((product) => {
-                  networkPrinter.leftRight(`    ${product.amount}x ${product.name}`, (product.price).toString());
-                })
-                networkPrinter.drawLine();
-                networkPrinter.leftRight("Zwischensumme:", billProducts.sum.toString());
-                networkPrinter.println('')
-              })
+      //         Object.entries(bill.billGroup).forEach(([category, billProducts]) => {
+      //           networkPrinter.println(category);
+      //           billProducts.products.forEach((product) => {
+      //             networkPrinter.leftRight(`    ${product.amount}x ${product.name}`, (product.price).toString());
+      //             if(product.info) networkPrinter.println(`      ${product.info}`)
+      //           })
+      //           networkPrinter.drawLine();
+      //           networkPrinter.leftRight("Zwischensumme:", billProducts.sum.toString());
+      //           networkPrinter.println('')
+      //         })
   
-              networkPrinter.drawLine();
-              networkPrinter.println('')
-              networkPrinter.println('Nicht bezahlt')
-              let notPaidAmount = 0
-              Object.entries(bill.notPaid).forEach(([waiter, notPaid]) => {
-                networkPrinter.leftRight(`    ${waiter}`, notPaid.toString())
-                notPaidAmount -= notPaid
-              })
-              networkPrinter.drawLine();
-              networkPrinter.leftRight("Abzug:", notPaidAmount.toString())
-              networkPrinter.println('')
+      //         networkPrinter.drawLine();
+      //         networkPrinter.println('')
+      //         networkPrinter.println('Nicht bezahlt')
+      //         let notPaidAmount = 0
+      //         Object.entries(bill.notPaid).forEach(([waiter, notPaid]) => {
+      //           networkPrinter.leftRight(`    ${waiter}`, notPaid.toString())
+      //           notPaidAmount -= notPaid
+      //         })
+      //         networkPrinter.drawLine();
+      //         networkPrinter.leftRight("Abzug:", notPaidAmount.toString())
+      //         networkPrinter.println('')
   
-              networkPrinter.println('')
-              networkPrinter.drawLine();
-              networkPrinter.leftRight('Summe', bill.sum.toString())
+      //         networkPrinter.println('')
+      //         networkPrinter.drawLine();
+      //         networkPrinter.leftRight('Summe', bill.sum.toString())
   
-              networkPrinter.cut();
-              return from(networkPrinter.execute()).pipe(switchMap(() => EMPTY));
-            } else {
-              console.error('Printer not connected');
-              return EMPTY;
-            }
-          })
-        );
-      } catch (err) {
-        console.error(err);
-        return EMPTY;
-      }
+      //         networkPrinter.cut();
+      //         return from(networkPrinter.execute()).pipe(switchMap(() => EMPTY));
+      //       } else {
+      //         console.error('Printer not connected');
+      //         return EMPTY;
+      //       }
+      //     })
+      //   );
+      // } catch (err) {
+      //   console.error(err);
+      //   return EMPTY;
+      // }
     }
   }
 
@@ -207,68 +204,67 @@ export class PrintSchedulerService {
     onFailure: () => unknown
   ): Observable<void> {
     console.log('Printing', order);
-    try {
-      const networkPrinter = new ThermalPrinter({
-        type: PrinterTypes.EPSON,
-        interface: `tcp://${printer.address}:9100`,
-        characterSet: CharacterSet.ISO8859_2_LATIN2,
-      });
+    return EMPTY
+    // try {
+    //   const networkPrinter = new ThermalPrinter({
+    //     type: PrinterTypes.EPSON,
+    //     interface: `tcp://${printer.address}:9100`,
+    //     characterSet: CharacterSet.ISO8859_2_LATIN2,
+    //   });
 
-      return from(networkPrinter.isPrinterConnected()).pipe(
-        switchMap((connected: boolean) => {
-          if (connected) {
-            networkPrinter.println('Kellner: ' + order.user);
-            networkPrinter.alignRight()
-            networkPrinter.setTextDoubleWidth();
-            networkPrinter.println(order.table.toString());
-            networkPrinter.alignLeft()
-            networkPrinter.setTextNormal()
-            networkPrinter.alignCenter();
-            networkPrinter.bold(true);
-            networkPrinter.println('');
-            networkPrinter.println('POSXPRESS');
-            networkPrinter.println('');
-            networkPrinter.bold(false);
-            networkPrinter.alignLeft();
-            networkPrinter.drawLine();
-            networkPrinter.println('');
-            networkPrinter.println('');
+    //   return from(networkPrinter.isPrinterConnected()).pipe(
+    //     switchMap((connected: boolean) => {
+    //       if (connected) {
+    //         networkPrinter.leftRight(
+    //           'Tisch: ' + order.table,
+    //           'Kellner: ' + order.user
+    //         );
+    //         networkPrinter.alignCenter();
+    //         networkPrinter.bold(true);
+    //         networkPrinter.println('');
+    //         networkPrinter.println('POSXPRESS');
+    //         networkPrinter.println('');
+    //         networkPrinter.bold(false);
+    //         networkPrinter.alignLeft();
+    //         networkPrinter.drawLine();
+    //         networkPrinter.println('');
+    //         networkPrinter.println('');
 
-            networkPrinter.setTextDoubleWidth();
+    //         networkPrinter.setTextDoubleWidth();
 
-            order.productGroups
-              .filter((group) => group.amount > 0)
-              .forEach((product) => {
-                networkPrinter.println(
-                  `${product.amount}x   ${product.name} ${
-                    product.product.info || ''
-                  }`
-                );
+    //         order.productGroups
+    //           .filter((group) => group.amount > 0)
+    //           .forEach((product) => {
+    //             networkPrinter.println(
+    //               `${product.amount}x   ${product.name} ${
+    //                 product.product.info || ''
+    //               }`
+    //             );
 
-                if (product.custom) {
-                  networkPrinter.println('        ' + product.info);
-                }
-              });
-            networkPrinter.println('');
-            networkPrinter.setTextNormal();
-            networkPrinter.drawLine();
-            networkPrinter.alignCenter();
-            networkPrinter.println(
-              formatDate(new Date())
-            );
-            networkPrinter.cut();
-            return from(networkPrinter.execute()).pipe(switchMap(() => EMPTY));
-          } else {
-            console.error('Printer not connected');
-            onFailure();
-            return EMPTY;
-          }
-        })
-      );
-    } catch (err) {
-      console.error(err);
-      onFailure();
-      return EMPTY;
-    }
+    //             if (product.custom) {
+    //               networkPrinter.println('        ' + product.info);
+    //             }
+    //           });
+    //         networkPrinter.println('');
+    //         networkPrinter.setTextNormal();
+    //         networkPrinter.drawLine();
+    //         networkPrinter.alignCenter();
+    //         networkPrinter.println(
+    //           formatDate(new Date())
+    //         );
+    //         networkPrinter.cut();
+    //         return from(networkPrinter.execute()).pipe(switchMap(() => EMPTY));
+    //       } else {
+    //         console.error('Printer not connected');
+    //         onFailure();
+    //         return EMPTY;
+    //       }
+    //     })
+    //   );
+    // } catch (err) {
+    //   console.error(err);
+    //   onFailure();
+    //   return EMPTY;
+    // }
   }
 }

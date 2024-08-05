@@ -48,16 +48,10 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    if (updateUserDto.password) {
-      updateUserDto.hashedPassword = bcrypt.hashSync(
-        updateUserDto.password,
-        bcrypt.genSaltSync(10)
-      );
-    }
-    return this.userModel.findByIdAndUpdate(id, updateUserDto);
+    return this.userModel.findById(id);
   }
 
   remove(id: string) {
-    return this.userModel.findByIdAndDelete(id);
+    return this.userModel.findById(id);
   }
 }
