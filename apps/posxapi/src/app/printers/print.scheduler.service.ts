@@ -164,7 +164,6 @@ export class PrintSchedulerService {
                 networkPrinter.println(category);
                 billProducts.products.forEach((product) => {
                   networkPrinter.leftRight(`    ${product.amount}x ${product.name}`, (product.price).toString());
-                  if(product.info) networkPrinter.println(`      ${product.info}`)
                 })
                 networkPrinter.drawLine();
                 networkPrinter.leftRight("Zwischensumme:", billProducts.sum.toString());
@@ -218,10 +217,12 @@ export class PrintSchedulerService {
       return from(networkPrinter.isPrinterConnected()).pipe(
         switchMap((connected: boolean) => {
           if (connected) {
-            networkPrinter.leftRight(
-              'Tisch: ' + order.table,
-              'Kellner: ' + order.user
-            );
+            networkPrinter.println('Kellner: ' + order.user);
+            networkPrinter.alignRight()
+            networkPrinter.setTextDoubleWidth();
+            networkPrinter.println(order.table.toString());
+            networkPrinter.alignLeft()
+            networkPrinter.setTextNormal()
             networkPrinter.alignCenter();
             networkPrinter.bold(true);
             networkPrinter.println('');

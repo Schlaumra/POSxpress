@@ -8,7 +8,6 @@ export interface BillInfo {
 export type BillProducts = Map<string, {
     amount: number
     price: number
-    info?: string
     name?: string
 }>
 

@@ -34,6 +34,10 @@ export class OrderService {
     return this.orderStore.orders$
   }
 
+  public get orderArchive$(): Observable<Order[]> {
+    return this.orderStore.orderArchive$
+  }
+
   public get currentOrder$(): Observable<Order | undefined> {
     return this.orderStore.currentOrder$
   }

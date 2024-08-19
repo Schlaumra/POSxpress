@@ -47,19 +47,14 @@ export class OrdersService extends AbstractCrudService<
           doc.productGroups.forEach((productGroup) => {
             if (productGroup.amount > 0) {
               const category = productGroup.product.tags[0];
-              const product = {
-                name: productGroup.product.name,
-                info: productGroup.info,
-              };
-              const key = `${product.name}_${product.info}`;
+              const key = productGroup.product.name;
 
               if (!billGroup[category]) {
                 billGroup[category] = { products: new Map(), sum: 0 };
               }
               const oldGroup = billGroup[category].products.get(key);
               billGroup[category].products.set(key, {
-                info: product.info,
-                name: product.name,
+                name: productGroup.product.name,
                 amount: productGroup.amount + (oldGroup?.amount || 0),
                 price:
                   productGroup.product.price * productGroup.amount +

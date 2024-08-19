@@ -11,7 +11,7 @@
           </div>
         </ng-container>
         <ng-container *ngIf="orderStore.state$ | async as state">
-          <button mat-mini-fab (click)="navigateBack()" *ngIf="state !== 0" [disabled]="state - 1 < 1">
+          <button mat-mini-fab (click)="navigateBack()" *ngIf="state !== 0" [disabled]="state - 1 < 1 || (orderStore.currentOrder$ | async)?.printed === true">
             <mat-icon>chevron_left</mat-icon>
           </button>
           <div class="info-container">

@@ -7,12 +7,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class OrderStoreService {
   private ordersSubject = new BehaviorSubject<Order[]>([]);
+  private orderArchiveSubject = new BehaviorSubject<Order[]>([]);
   private currentOrderSubject = new BehaviorSubject<Order | undefined>(
     undefined
   );
 
   public get orders$(): Observable<Order[]> {
     return this.ordersSubject.asObservable();
+  }
+
+  public get orderArchive$(): Observable<Order[]> {
+    return this.orderArchiveSubject.asObservable();
   }
 
   public get currentOrder$(): Observable<Order | undefined> {
@@ -36,6 +41,30 @@ export class OrderStoreService {
 
   private saveOrdersToLocalStore() {
     localStorage.setItem('orders', JSON.stringify(this.ordersSubject.value));
+  }
+
+  private getOrderArchiveFromLocalStore() {
+    const lsItem = localStorage.getItem('order-archive');
+    if (lsItem) {
+      try {
+        this.orderArchiveSubject.next(JSON.parse(lsItem) as Order[]);
+      } catch {
+        console.warn('The localstore contains wrong values: orderArchive');
+      }
+    }
+  }
+
+  private saveOrderArchiveToLocalStore() {
+    localStorage.setItem(
+      'order-archive',
+      JSON.stringify(this.orderArchiveSubject.value)
+    );
+  }
+
+  private addOrdertoArchive(order: Order) {
+    if(order.payed == true) {
+      this.orderArchiveSubject.next([...this.orderArchiveSubject.value, order])
+    }
   }
 
   private getCurrentOrderFromLocalStore() {
@@ -82,12 +111,19 @@ export class OrderStoreService {
     return this.ordersSubject.value.find((order) => order.table == table);
   }
 
-  public removeOrder(table: number) {
-    const order = this.ordersSubject.value;
-    this.ordersSubject.next(order.filter((ord) => ord.table !== table));
-    if (this.currentOrderSubject.value?.table === table) {
-      this.clearCurrentOrder();
+  public removeOrder(table: number): Order | null {
+    const orders = this.ordersSubject.value;
+    const orderIndex = orders.findIndex((ord) => ord.table === table);
+    if (orderIndex >= 0) {
+      const order = orders[orderIndex];
+      orders.splice(orderIndex, 1);
+      this.ordersSubject.next(orders.filter((ord) => ord.table !== table));
+      if (this.currentOrderSubject.value?.table === table) {
+        this.clearCurrentOrder();
+      }
+      return order;
     }
+    return null;
   }
 
   public addOrder(order: Order) {
@@ -108,7 +144,8 @@ export class OrderStoreService {
   public removeCurrentOrder() {
     const table = this.currentOrderSubject.value?.table;
     if (table) {
-      this.removeOrder(table);
+      const order = this.removeOrder(table);
+      if(order) this.addOrdertoArchive(order)
       this.clearCurrentOrder();
     } else console.warn('no current order; cannot remove');
   }
@@ -116,8 +153,12 @@ export class OrderStoreService {
   constructor() {
     this.getOrdersFromLocalStore();
     this.getCurrentOrderFromLocalStore();
+    this.getOrderArchiveFromLocalStore();
 
     this.ordersSubject.subscribe(() => this.saveOrdersToLocalStore());
+    this.orderArchiveSubject.subscribe(() =>
+      this.saveOrderArchiveToLocalStore()
+    );
     this.currentOrderSubject.subscribe(() =>
       this.saveCurrentOrderToLocalStore()
     );

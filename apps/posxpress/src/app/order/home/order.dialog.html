@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>{{data._id}}</h1>
+<div mat-dialog-content>
+    Kellner: {{ data.user }}<br>
+    Tisch: {{ data.table }}<br>
+    Preis: {{ data.income | currency: 'EUR'}}<br>
+    Abgesendet: {{ data.timePrinted | date: 'HH:mm dd.MM.YY'}}<br>
+    Bezahlt: {{ data.timePayed | date: 'HH:mm dd.MM.YY'}}<br>
+
+    <br>
+    <h2>Produkte</h2>
+    <ng-container *ngFor="let productGroup of data.productGroups">
+        <div *ngIf="productGroup.amount > 0">
+            {{ productGroup.amount }}x {{ productGroup.name }} {{ productGroup.info ? '-- ' + productGroup.info : '' }} -- {{ productGroup.amount * productGroup.product.price | currency: 'EUR'}}
+        </div>
+    </ng-container>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button cdkFocusInitial (click)="close()">Schließen</button>
+</div>

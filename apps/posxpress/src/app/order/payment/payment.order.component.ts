@@ -168,7 +168,7 @@ export class PayDialogComponent {
 
   submit() {
     this.dialogRef.close({
-      payedWith: this.payedWith,
+      payedWith: this.payedWith || this.priceToPay,
       priceToPay: this.priceToPay,
     });
   }

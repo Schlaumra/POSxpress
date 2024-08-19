@@ -14,7 +14,7 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Abrechen</button>
-    <button mat-fab extended [disabled]="(payedWith || 0) < priceToPay" (click)="submit()">
+    <button mat-fab extended [disabled]="payedWith && payedWith < priceToPay" (click)="submit()">
       <mat-icon>payments</mat-icon>Zahlen
     </button>
   </mat-dialog-actions>
