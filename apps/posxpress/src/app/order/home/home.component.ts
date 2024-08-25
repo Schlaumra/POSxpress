@@ -68,8 +68,4 @@ export class HomeComponent {
   removeOrder(table: number) {
     this.orderService.orderStore.removeOrder(table);
   }
-
-  logout() {
-    this.router.navigate(['logout']);
-  }
 }

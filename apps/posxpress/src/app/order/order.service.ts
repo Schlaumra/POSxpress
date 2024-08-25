@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { PrintService } from '../print/print.service';
 import { OrderStoreService } from '../order.store.service';
 import { DataService } from '../data/data.service';
+import { Location } from '@angular/common';
 
 export enum OrderState {
   'home',
@@ -109,6 +110,7 @@ export class OrderService {
   constructor(
     public orderStore: OrderStoreService,
     private router: Router,
+    private location: Location,
     private authService: AuthService,
     private productSettingsService: ProductSettingsService,
     private printService: PrintService,
@@ -175,19 +177,23 @@ export class OrderService {
         break;
       case OrderState.table:
         this.stateSubject.next(OrderState.table);
+        this.location.replaceState('order/home')
         this.router.navigate(['order', 'table']);
         break;
       case OrderState.select:
         this.stateSubject.next(OrderState.select);
         this.router.navigate(['order', 'select']);
+        this.location.replaceState('order/home')
         break;
       case OrderState.print:
         this.stateSubject.next(OrderState.print);
         this.router.navigate(['order', 'preview']);
+        this.location.replaceState('order/home')
         break;
       case OrderState.payment:
         this.stateSubject.next(OrderState.payment);
         this.router.navigate(['order', 'payment']);
+        this.location.replaceState('order/home')
         break;
       case OrderState.complete:
         this.stateSubject.next(OrderState.home);

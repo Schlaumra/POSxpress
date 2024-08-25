@@ -6,6 +6,9 @@
   .accordion {
     flex-grow: 1;
     margin-bottom: 90px;
+    mat-panel-title {
+      font-size: 1.5rem;
+    }
     .out-of-stock-overlay {
       position: absolute;
       left: 0;
