@@ -60,12 +60,12 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "posxpress:build:production"
+          "buildTarget": "posxpress:build:production"
         },
         "development": {
           "host": "0.0.0.0",
           "proxyConfig": "apps/posxpress/proxy.conf.json",
-          "browserTarget": "posxpress:build:development"
+          "buildTarget": "posxpress:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -73,31 +73,18 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "posxpress:build"
+        "buildTarget": "posxpress:build"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": [
-          "apps/posxpress/**/*.ts",
-          "apps/posxpress/**/*.html"
-        ]
-      }
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/posxpress/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/posxpress/jest.config.ts"
       }
     },
     "serve-static": {
