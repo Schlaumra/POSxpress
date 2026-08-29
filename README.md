@@ -10,7 +10,7 @@ Upon payment confirmation, orders are promptly dispatched to designated printers
 
 ## Setup
 
-1. Install and check if you have a running installation of docker
+1. Install and check if you have a running installation of docker and buildx
 2. Start the docker daemon if not running `systemctl start docker`
 3. Copy the `.env.tpl` to `.env` and change the values accordingly
 4. Run `pnpm install`
