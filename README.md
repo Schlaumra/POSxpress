@@ -46,3 +46,7 @@ Upon payment confirmation, orders are promptly dispatched to designated printers
 # IMPORTANT Note
 
 This project can be improved on (features, bugs, security) but since the software is successfully deployed in production and my time to work on this is shrinking, I decided to put this project aside. Don't hesitate to use or even improve the software.
+
+# Possible Raspberry mongo image
+
+https://github.com/themattman/mongodb-raspberrypi-docker
