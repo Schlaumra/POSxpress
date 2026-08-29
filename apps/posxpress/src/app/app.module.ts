@@ -30,7 +30,7 @@ import { SelectOrderComponent } from './order/select/select.order.component';
 import { PreviewOrderComponent } from './order/preview/preview.order.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthService } from './auth/auth.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { PrintService } from './print/print.service';
@@ -45,62 +45,56 @@ export function tokenGetter() {
   return localStorage.getItem('access_token');
 }
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    AdminComponent,
-    UserSettingsComponent,
-    PrinterSettingsComponent,
-    ProductSettingsComponent,
-    OrderComponent,
-    TableOrderComponent,
-    SelectOrderComponent,
-    PreviewOrderComponent,
-    PaymentOrderComponent,
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-      },
-    }),
-    RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    BrowserAnimationsModule,
-    HomeComponent,
-    ReactiveFormsModule,
-    MatToolbarModule,
-    MatBadgeModule,
-    MatSidenavModule,
-    MatTableModule,
-    MatSnackBarModule,
-    MatListModule,
-    DragDropModule,
-    MatExpansionModule,
-    LogoutComponent,
-    MatDialogModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatCardModule,
-    MatCheckboxModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-  ],
-  providers: [
-    AuthService,
-    PrintService,
-    OrderStoreService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        AdminComponent,
+        UserSettingsComponent,
+        PrinterSettingsComponent,
+        ProductSettingsComponent,
+        OrderComponent,
+        TableOrderComponent,
+        SelectOrderComponent,
+        PreviewOrderComponent,
+        PaymentOrderComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: tokenGetter,
+            },
+        }),
+        RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        BrowserAnimationsModule,
+        HomeComponent,
+        ReactiveFormsModule,
+        MatToolbarModule,
+        MatBadgeModule,
+        MatSidenavModule,
+        MatTableModule,
+        MatSnackBarModule,
+        MatListModule,
+        DragDropModule,
+        MatExpansionModule,
+        LogoutComponent,
+        MatDialogModule,
+        MatSelectModule,
+        MatChipsModule,
+        MatCardModule,
+        MatCheckboxModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            // Register the ServiceWorker as soon as the application is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000',
+        })], providers: [
+        AuthService,
+        PrintService,
+        OrderStoreService,
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
