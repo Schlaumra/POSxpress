@@ -32,19 +32,18 @@ interface UserControl {
 }
 
 @Component({
-  selector: 'px-user.settings.dialog',
-  templateUrl: 'user.edit.dialog.html',
-  standalone: true,
-  imports: [
-    FormTagSelectComponent,
-    CrudDialogComponent,
-    MatDialogModule,
-    MatInputModule,
-    FormsModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-  ],
-  providers: [DataService],
+    selector: 'px-user.settings.dialog',
+    templateUrl: 'user.edit.dialog.html',
+    imports: [
+        FormTagSelectComponent,
+        CrudDialogComponent,
+        MatDialogModule,
+        MatInputModule,
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+    ],
+    providers: [DataService]
 })
 export class UserSettingsDialogComponent extends AbstractCrudDialogComponent<
   IUserOpenContext,

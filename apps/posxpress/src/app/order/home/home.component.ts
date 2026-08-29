@@ -14,22 +14,21 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { OrderDialogComponent } from './order.dialog';
 
 @Component({
-  selector: 'px-home',
-  templateUrl: 'home.component.html',
-  styleUrls: ['home.component.scss'],
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    NgFor,
-    AsyncPipe,
-    MatCardModule,
-    NgIf,
-    MatDividerModule,
-    MatTableModule,
-    DatePipe,
-    MatDialogModule
-  ],
+    selector: 'px-home',
+    templateUrl: 'home.component.html',
+    styleUrls: ['home.component.scss'],
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        NgFor,
+        AsyncPipe,
+        MatCardModule,
+        NgIf,
+        MatDividerModule,
+        MatTableModule,
+        DatePipe,
+        MatDialogModule
+    ]
 })
 export class HomeComponent {
   user: string;

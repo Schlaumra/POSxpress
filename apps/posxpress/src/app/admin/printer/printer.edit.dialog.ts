@@ -42,24 +42,23 @@ interface printerControl {
 }
 
 @Component({
-  selector: 'px-printer.settings.dialog',
-  templateUrl: 'printer.edit.dialog.html',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    MatFormFieldModule,
-    FormTagSelectComponent,
-    MatSnackBarModule,
-    MatSelectModule,
-    NgFor,
-    ReactiveFormsModule,
-    AsyncPipe,
-    CrudDialogComponent,
-  ],
-  providers: [DataService, PrintService],
+    selector: 'px-printer.settings.dialog',
+    templateUrl: 'printer.edit.dialog.html',
+    imports: [
+        MatDialogModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        MatFormFieldModule,
+        FormTagSelectComponent,
+        MatSnackBarModule,
+        MatSelectModule,
+        NgFor,
+        ReactiveFormsModule,
+        AsyncPipe,
+        CrudDialogComponent,
+    ],
+    providers: [DataService, PrintService]
 })
 export class PrinterSettingsDialogComponent extends AbstractCrudDialogComponent<
   IPrinterOpenContext,

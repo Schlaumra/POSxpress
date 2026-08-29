@@ -15,21 +15,17 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatTable } from '@angular/material/table';
 
 @Component({
-  selector: 'px-product.settings',
-  templateUrl: './product.settings.component.html',
-  styleUrls: ['./product.settings.component.scss'],
-  providers: [
-    {
-      provide: CrudDialogService,
-      deps: [MatDialog, ProductSettingsService],
-      useFactory: (matDialog: MatDialog, productSettingsService: ProductSettingsService) =>
-        new CrudDialogService<IProduct, ProductSettingsDialogComponent>(
-          matDialog,
-          ProductSettingsDialogComponent,
-          productSettingsService
-        ),
-    },
-  ]
+    selector: 'px-product.settings',
+    templateUrl: './product.settings.component.html',
+    styleUrls: ['./product.settings.component.scss'],
+    providers: [
+        {
+            provide: CrudDialogService,
+            deps: [MatDialog, ProductSettingsService],
+            useFactory: (matDialog: MatDialog, productSettingsService: ProductSettingsService) => new CrudDialogService<IProduct, ProductSettingsDialogComponent>(matDialog, ProductSettingsDialogComponent, productSettingsService),
+        },
+    ],
+    standalone: false
 })
 export class ProductSettingsComponent extends AdminSettings {
   @ViewChild('table') table!: MatTable<IProduct>;

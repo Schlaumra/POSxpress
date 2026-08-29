@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { OrderService, OrderState } from './order.service';
 
 @Component({
-  selector: 'px-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+    selector: 'px-order',
+    templateUrl: './order.component.html',
+    styleUrls: ['./order.component.scss'],
+    standalone: false
 })
 export class OrderComponent {
   paymentState = OrderState.payment;

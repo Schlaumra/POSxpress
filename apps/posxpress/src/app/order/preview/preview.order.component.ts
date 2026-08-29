@@ -5,9 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order, ProductGroup } from '@px/interface';
 
 @Component({
-  selector: 'px-preview.order',
-  templateUrl: './preview.order.component.html',
-  styleUrls: ['./preview.order.component.scss'],
+    selector: 'px-preview.order',
+    templateUrl: './preview.order.component.html',
+    styleUrls: ['./preview.order.component.scss'],
+    standalone: false
 })
 export class PreviewOrderComponent {
   tags: string[] = [];

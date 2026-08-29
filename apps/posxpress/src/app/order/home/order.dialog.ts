@@ -9,11 +9,10 @@ import {
 import { Order } from '@px/interface';
 
 @Component({
-  selector: 'px-order.dialog',
-  templateUrl: 'order.dialog.html',
-  styleUrls: ['order.dialog.scss'],
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, DatePipe, CurrencyPipe, NgFor, NgIf],
+    selector: 'px-order.dialog',
+    templateUrl: 'order.dialog.html',
+    styleUrls: ['order.dialog.scss'],
+    imports: [MatDialogModule, MatButtonModule, DatePipe, CurrencyPipe, NgFor, NgIf]
 })
 export class OrderDialogComponent {
   constructor(

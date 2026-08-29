@@ -8,13 +8,12 @@ import { AbstractDialog } from '@px/client-dialog';
 import { CrudCloseContext, CrudEntity, CrudOpenContext, DialogCode } from './crud-dialog.service';
 
 @Component({
-  selector: 'px-crud-dialog',
-  templateUrl: 'crud-dialog.component.html',
-  styleUrls: [
-    'crud-dialog.component.scss'
-  ],
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, AsyncPipe, ReactiveFormsModule],
+    selector: 'px-crud-dialog',
+    templateUrl: 'crud-dialog.component.html',
+    styleUrls: [
+        'crud-dialog.component.scss'
+    ],
+    imports: [MatDialogModule, MatButtonModule, AsyncPipe, ReactiveFormsModule]
 })
 export class CrudDialogComponent<TData extends CrudEntity> extends AbstractDialog<CrudOpenContext<TData>, CrudDialogComponent<TData>>{
   @Input({required: true})

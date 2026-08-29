@@ -7,9 +7,10 @@ import { OrderService, OrderState } from '../order.service';
 const MIN = 1;
 
 @Component({
-  selector: 'px-table.order',
-  templateUrl: './table.order.component.html',
-  styleUrls: ['./table.order.component.scss'],
+    selector: 'px-table.order',
+    templateUrl: './table.order.component.html',
+    styleUrls: ['./table.order.component.scss'],
+    standalone: false
 })
 export class TableOrderComponent {
   tableNumber = 0;

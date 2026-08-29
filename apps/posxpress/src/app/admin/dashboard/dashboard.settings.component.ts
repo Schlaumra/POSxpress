@@ -23,23 +23,22 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
-  selector: 'px-dashboard.settings',
-  templateUrl: './dashboard.settings.component.html',
-  styleUrls: ['./dashboard.settings.component.scss'],
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    AsyncPipe,
-    FormTagSelectComponent,
-    MatButtonModule,
-    MatIconModule,
-    CurrencyPipe,
-    MatDividerModule,
-    DatePipe
-  ],
+    selector: 'px-dashboard.settings',
+    templateUrl: './dashboard.settings.component.html',
+    styleUrls: ['./dashboard.settings.component.scss'],
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        AsyncPipe,
+        FormTagSelectComponent,
+        MatButtonModule,
+        MatIconModule,
+        CurrencyPipe,
+        MatDividerModule,
+        DatePipe
+    ]
 })
 export class DashboardSettingsComponent extends AdminSettings {
   title = 'Benutzer';

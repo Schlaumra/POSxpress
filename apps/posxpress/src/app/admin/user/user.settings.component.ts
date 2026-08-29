@@ -13,21 +13,17 @@ import { CrudDialogService } from '@px/client-crud';
 import { UserSettingsDialogComponent } from './user.edit.dialog';
 
 @Component({
-  selector: 'px-user.settings',
-  templateUrl: './user.settings.component.html',
-  styleUrls: ['./user.settings.component.scss'],
-  providers: [
-    {
-      provide: CrudDialogService,
-      deps: [MatDialog, UserSettingsService],
-      useFactory: (matDialog: MatDialog, userSettingsService: UserSettingsService) =>
-        new CrudDialogService<IUser, UserSettingsDialogComponent>(
-          matDialog,
-          UserSettingsDialogComponent,
-          userSettingsService
-        ),
-    },
-  ]
+    selector: 'px-user.settings',
+    templateUrl: './user.settings.component.html',
+    styleUrls: ['./user.settings.component.scss'],
+    providers: [
+        {
+            provide: CrudDialogService,
+            deps: [MatDialog, UserSettingsService],
+            useFactory: (matDialog: MatDialog, userSettingsService: UserSettingsService) => new CrudDialogService<IUser, UserSettingsDialogComponent>(matDialog, UserSettingsDialogComponent, userSettingsService),
+        },
+    ],
+    standalone: false
 })
 export class UserSettingsComponent extends AdminSettings {
   title = 'Benutzer';

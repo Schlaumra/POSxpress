@@ -23,9 +23,10 @@ export interface Payment {
 }
 
 @Component({
-  selector: 'px-payment.order',
-  templateUrl: './payment.order.component.html',
-  styleUrls: ['./payment.order.component.scss'],
+    selector: 'px-payment.order',
+    templateUrl: './payment.order.component.html',
+    styleUrls: ['./payment.order.component.scss'],
+    standalone: false
 })
 export class PaymentOrderComponent {
   private categoriesSubject = new BehaviorSubject<PaymentCategories>({
@@ -127,22 +128,21 @@ export class PaymentOrderComponent {
 }
 
 @Component({
-  selector: 'px-pay.dialog',
-  templateUrl: 'pay.dialog.html',
-  styleUrls: ['pay.dialog.scss'],
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatDividerModule,
-    MatIconModule,
-    CurrencyPipe,
-    NgFor,
-    ReactiveFormsModule,
-  ],
+    selector: 'px-pay.dialog',
+    templateUrl: 'pay.dialog.html',
+    styleUrls: ['pay.dialog.scss'],
+    imports: [
+        MatDialogModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatDividerModule,
+        MatIconModule,
+        CurrencyPipe,
+        NgFor,
+        ReactiveFormsModule,
+    ]
 })
 export class PayDialogComponent {
   priceForm = this.formBuilder.group({

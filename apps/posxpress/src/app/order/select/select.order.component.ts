@@ -18,9 +18,10 @@ import { Order, ProductGroup } from '@px/interface';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'px-select.order',
-  templateUrl: './select.order.component.html',
-  styleUrls: ['./select.order.component.scss'],
+    selector: 'px-select.order',
+    templateUrl: './select.order.component.html',
+    styleUrls: ['./select.order.component.scss'],
+    standalone: false
 })
 export class SelectOrderComponent {
   protected tagFilter = OrderService.tagFilter;
@@ -121,23 +122,22 @@ export class SelectOrderComponent {
 }
 
 @Component({
-  selector: 'px-select.edit.dialog',
-  templateUrl: 'select.edit.dialog.html',
-  styleUrls: ['select.edit.dialog.scss'],
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule,
-    NgIf,
-    MatFormFieldModule,
-    MatIconModule,
-    MatCheckboxModule,
-    NgFor,
-    ReactiveFormsModule,
-    CurrencyPipe
-  ],
+    selector: 'px-select.edit.dialog',
+    templateUrl: 'select.edit.dialog.html',
+    styleUrls: ['select.edit.dialog.scss'],
+    imports: [
+        MatDialogModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        NgIf,
+        MatFormFieldModule,
+        MatIconModule,
+        MatCheckboxModule,
+        NgFor,
+        ReactiveFormsModule,
+        CurrencyPipe
+    ]
 })
 export class ProductGroupDialogComponent {
   productGroup: ProductGroup;

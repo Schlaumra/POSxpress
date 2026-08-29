@@ -38,19 +38,18 @@ interface AllTagsService {
 }
 
 @Component({
-  selector: 'px-form-tag-select',
-  templateUrl: 'form-tag-select.component.html',
-  styleUrls: ['form-tag-select.component.scss'],
-  standalone: true,
-  imports: [
-    MatInputModule,
-    MatChipsModule,
-    MatIconModule,
-    NgFor,
-    AsyncPipe,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-  ],
+    selector: 'px-form-tag-select',
+    templateUrl: 'form-tag-select.component.html',
+    styleUrls: ['form-tag-select.component.scss'],
+    imports: [
+        MatInputModule,
+        MatChipsModule,
+        MatIconModule,
+        NgFor,
+        AsyncPipe,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+    ]
 })
 export class FormTagSelectComponent implements OnInit, OnDestroy {
   @Input({ required: true })

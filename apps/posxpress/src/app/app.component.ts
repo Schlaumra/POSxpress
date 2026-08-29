@@ -11,9 +11,10 @@ interface link {
 }
 
 @Component({
-  selector: 'px-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'px-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
   title = 'POSxpress';

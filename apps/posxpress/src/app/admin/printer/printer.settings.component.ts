@@ -7,21 +7,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { PrinterSettingsDialogComponent } from './printer.edit.dialog';
 
 @Component({
-  selector: 'px-printer.settings',
-  templateUrl: './printer.settings.component.html',
-  styleUrls: ['./printer.settings.component.scss'],
-  providers: [
-    {
-      provide: CrudDialogService,
-      deps: [MatDialog, PrinterSettingsService],
-      useFactory: (matDialog: MatDialog, printerSettingsService: PrinterSettingsService) =>
-        new CrudDialogService<IPrinter, PrinterSettingsDialogComponent>(
-          matDialog,
-          PrinterSettingsDialogComponent,
-          printerSettingsService
-        ),
-    },
-  ],
+    selector: 'px-printer.settings',
+    templateUrl: './printer.settings.component.html',
+    styleUrls: ['./printer.settings.component.scss'],
+    providers: [
+        {
+            provide: CrudDialogService,
+            deps: [MatDialog, PrinterSettingsService],
+            useFactory: (matDialog: MatDialog, printerSettingsService: PrinterSettingsService) => new CrudDialogService<IPrinter, PrinterSettingsDialogComponent>(matDialog, PrinterSettingsDialogComponent, printerSettingsService),
+        },
+    ],
+    standalone: false
 })
 export class PrinterSettingsComponent extends AdminSettings {
   printers: IPrinter[] = [];

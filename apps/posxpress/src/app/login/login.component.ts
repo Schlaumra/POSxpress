@@ -13,9 +13,10 @@ function required(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  selector: 'px-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'px-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent {
   // Login form Username and Password
