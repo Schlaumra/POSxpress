@@ -140,7 +140,6 @@ export class PaymentOrderComponent {
         MatDividerModule,
         MatIconModule,
         CurrencyPipe,
-        NgFor,
         ReactiveFormsModule,
     ]
 })

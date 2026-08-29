@@ -55,7 +55,6 @@ interface printerControl {
         MatSelectModule,
         NgFor,
         ReactiveFormsModule,
-        AsyncPipe,
         CrudDialogComponent,
     ],
     providers: [DataService, PrintService]

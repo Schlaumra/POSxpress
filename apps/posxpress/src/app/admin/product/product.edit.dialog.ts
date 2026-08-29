@@ -73,7 +73,6 @@ interface ProductControl {
         MatIconModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        AsyncPipe,
     ],
     providers: [DataService]
 })

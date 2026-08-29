@@ -13,7 +13,7 @@ import { CrudCloseContext, CrudEntity, CrudOpenContext, DialogCode } from './cru
     styleUrls: [
         'crud-dialog.component.scss'
     ],
-    imports: [MatDialogModule, MatButtonModule, AsyncPipe, ReactiveFormsModule]
+    imports: [MatDialogModule, MatButtonModule, ReactiveFormsModule]
 })
 export class CrudDialogComponent<TData extends CrudEntity> extends AbstractDialog<CrudOpenContext<TData>, CrudDialogComponent<TData>>{
   @Input({required: true})
